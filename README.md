@@ -1,13 +1,14 @@
-## 프로젝트
+**문서 목록**
 
-## Getting Started
+---
 
-### Prerequisites
+## 1. 요구사항 분석
+ - [마일스톤](docs/milestone.md)
+ - [시퀀스 다이어그램](docs/sequenceDiagram.md)
+ - [클래스 다이어그램](docs/classDiagram.md)
+ - [ERD](docs/erd.md)
 
-#### Running Docker Containers
+## Mock API 및 Swagger-API 작성
 
-`local` profile 로 실행하기 위하여 인프라가 설정되어 있는 Docker 컨테이너를 실행해주셔야 합니다.
-
-```bash
-docker-compose up -d
-```
+- Mock API
+- Swagger-API
