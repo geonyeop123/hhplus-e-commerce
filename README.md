@@ -7,8 +7,7 @@
  - [시퀀스 다이어그램](docs/sequenceDiagram.md)
  - [클래스 다이어그램](docs/classDiagram.md)
  - [ERD](docs/erd.md)
+ 
+## 2. Mock API 및 Swagger-API 작성
 
-## Mock API 및 Swagger-API 작성
-
-- Mock API
-- Swagger-API
+- [API 명세서](https://app.swaggerhub.com/apis-docs/geonyeop123/hhplus-e-commerce/1.0.0#/)
