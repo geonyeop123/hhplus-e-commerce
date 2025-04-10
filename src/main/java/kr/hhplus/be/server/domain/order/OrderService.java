@@ -10,7 +10,7 @@ public class OrderService {
     private final OrderRepository orderRepository;
 
     public Order order(OrderCommand command) {
-        Order order = Order.create(command.user());
+        Order order = Order.create(command.user(), command.discountInfo());
 
         command.orderLines().stream()
                     .map(orderProduct ->

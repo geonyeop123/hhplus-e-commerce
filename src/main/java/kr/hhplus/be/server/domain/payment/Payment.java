@@ -25,7 +25,7 @@ public class Payment {
 
     private Payment(Order order) {
         this.order = order;
-        this.totalAmount = order.getPaymentAmount();
+        this.totalAmount = order.getFinalAmount();
         this.status = PaymentStatus.PENDING;
     }
 }

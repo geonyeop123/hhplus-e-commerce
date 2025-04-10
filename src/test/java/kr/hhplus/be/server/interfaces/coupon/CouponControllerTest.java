@@ -1,49 +1,68 @@
 package kr.hhplus.be.server.interfaces.coupon;
 
-import org.junit.jupiter.api.BeforeEach;
+import kr.hhplus.be.server.domain.common.PageResult;
+import kr.hhplus.be.server.domain.coupon.CouponCommand;
+import kr.hhplus.be.server.domain.coupon.CouponService;
+import kr.hhplus.be.server.domain.userCoupon.UserCoupon;
+import kr.hhplus.be.server.domain.userCoupon.UserCouponCommand;
+import kr.hhplus.be.server.domain.userCoupon.UserCouponService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.time.LocalDate;
+import java.util.List;
 
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(CouponController.class)
+@ExtendWith(SpringExtension.class)
 class CouponControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
 
-    private CouponResponse couponResponse;
+    @MockitoBean
+    private CouponService couponService;
 
-    @BeforeEach
-    void setUp() {
-        couponResponse = new CouponResponse(1L, 1L,"4월 깜짝 할인 쿠폰", 10000, LocalDate.of(2025,5,4), null);
-    }
+    @MockitoBean
+    private UserCouponService userCouponService;
 
     @DisplayName("사용자와 쿠폰의 id를 통해 쿠폰을 발급받을 수 있다.")
     @Test
     void post_api_v1_users_userId_coupons_couponId_200() throws Exception{
         // given
-        Long userId = couponResponse.userCouponId();
-        Long couponId = couponResponse.userCouponId();
+        Long userId = 1L;
+        Long couponId = 1L;
+        CouponCommand command = new CouponCommand(userId, couponId);
+        UserCoupon res = UserCoupon.builder()
+                .id(1L)
+                .userId(userId)
+                .couponId(couponId)
+                .name("4월 반짝 쿠폰")
+                .discountAmount(5000)
+                .expiredAt(LocalDate.of(2025, 4, 20))
+                .build();
+        when(couponService.issue(command)).thenReturn(res);
 
         // when // then
         mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/users/{userId}/coupons/{couponId}", userId, couponId))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.userId").value(userId))
-                .andExpect(jsonPath("$.userCouponId").value(couponResponse.userCouponId()))
-                .andExpect(jsonPath("$.name").value(couponResponse.name()))
-                .andExpect(jsonPath("$.discountAmount").value(couponResponse.discountAmount()))
-                .andExpect(jsonPath("$.expirationAt").value("2025-05-04"))
-                .andExpect(jsonPath("$.usedAt").value(couponResponse.usedAt()))
+                .andExpect(jsonPath("$.userCouponId").value(res.getId()))
+                .andExpect(jsonPath("$.name").value(res.getName()))
+                .andExpect(jsonPath("$.discountAmount").value(res.getDiscountAmount()))
+                .andExpect(jsonPath("$.expirationAt").value("2025-04-20"))
         ;
     }
 
@@ -51,18 +70,31 @@ class CouponControllerTest {
     @Test
     void get_api_v1_users_userId_coupons_200() throws Exception{
         // given
-        Long userId = couponResponse.userCouponId();
+        Long userId = 1L;
+        UserCouponCommand.FindAll command = new UserCouponCommand.FindAll(userId, 1, 10);
+        UserCoupon userCoupon = UserCoupon.builder()
+                .id(1L)
+                .userId(userId)
+                .couponId(1L)
+                .name("4월 반짝 쿠폰")
+                .discountAmount(5000)
+                .expiredAt(LocalDate.of(2025, 4, 20))
+                .build();
+        PageResult<UserCoupon> result = PageResult.create(List.of(userCoupon),
+                command.pageNo(), command.pageSize(), 1);
+        when(userCouponService.findAllByUserId(command)).thenReturn(result);
 
         // when // then
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/users/{userId}/coupons", userId))
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/users/{userId}/coupons", userId)
+                        .queryParam("pageNo", String.valueOf(command.pageNo()))
+                        .queryParam("pageSize", String.valueOf(command.pageSize())))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.[0].userId").value(userId))
-                .andExpect(jsonPath("$.[0].userCouponId").value(couponResponse.userCouponId()))
-                .andExpect(jsonPath("$.[0].name").value(couponResponse.name()))
-                .andExpect(jsonPath("$.[0].discountAmount").value(couponResponse.discountAmount()))
-                .andExpect(jsonPath("$.[0].expirationAt").value("2025-05-04"))
-                .andExpect(jsonPath("$.[0].usedAt").value(couponResponse.usedAt()))
+                .andExpect(jsonPath("$.content").isArray())
+                .andExpect(jsonPath("$.page").value(command.pageNo()))
+                .andExpect(jsonPath("$.size").value(command.pageSize()))
+                .andExpect(jsonPath("$.totalCount").value(result.totalCount()))
+                .andExpect(jsonPath("$.totalPages").value(result.totalPages()))
         ;
     }
 

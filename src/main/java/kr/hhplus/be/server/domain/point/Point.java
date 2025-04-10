@@ -1,6 +1,8 @@
 package kr.hhplus.be.server.domain.point;
 
 import kr.hhplus.be.server.domain.user.User;
+import kr.hhplus.be.server.support.exception.InsufficientBalanceException;
+import kr.hhplus.be.server.support.exception.MaximumBalanceException;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -10,14 +12,16 @@ import java.util.Objects;
 @NoArgsConstructor
 public class Point {
 
+    private Long id;
     private User user;
     private int balance;
 
-    public static Point create(User user, int balance) {
-        return new Point(user, balance);
+    public static Point create(Long id, User user, int balance) {
+        return new Point(id, user, balance);
     }
 
-    private Point(User user, int balance) {
+    private Point(Long id, User user, int balance) {
+        this.id = id;
         this.user = user;
         this.balance = balance;
     }
@@ -28,7 +32,7 @@ public class Point {
         if(PointRule.CHARGE.getMin() >= amount){
             throw new IllegalArgumentException("포인트는 1포인트 이상부터 충전이 가능합니다.");
         }else if(PointRule.CHARGE.getMax() < balance){
-            throw new IllegalArgumentException("충전 이후 포인트는 10,000,000포인트를 넘을 수 없습니다.");
+            throw new MaximumBalanceException();
         }
 
         this.balance = balance;
@@ -41,7 +45,7 @@ public class Point {
         if(amount <= 0){
             throw new IllegalArgumentException("포인트는 1포인트 이상부터 사용 가능합니다.");
         }else if(usedBalance <= 0){
-            throw new IllegalArgumentException("보유 포인트가 부족합니다.");
+            throw new InsufficientBalanceException();
         }
         balance = usedBalance;
     }

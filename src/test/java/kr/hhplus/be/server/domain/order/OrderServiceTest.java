@@ -33,7 +33,7 @@ class OrderServiceTest {
         List<OrderCommand.OrderLine> orderLines =
                 List.of(new OrderCommand.OrderLine(product, 1));
 
-        OrderCommand command = new OrderCommand(user, orderLines);
+        OrderCommand command = new OrderCommand(user, DiscountInfo.empty(), orderLines);
 
         when(orderRepository.save(any(Order.class))).thenReturn(any(Order.class));
 
@@ -49,7 +49,7 @@ class OrderServiceTest {
     void test() {
         // given
         User user = User.create(1L, "yeop");
-        Order order = Order.create(user);
+        Order order = Order.create(user, DiscountInfo.empty());
 
         // when
         orderService.complete(order);

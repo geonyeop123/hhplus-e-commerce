@@ -9,11 +9,13 @@ public record OrderRequest(
 
     public record Create(
             Long userId,
+            Long userCouponId,
             List<OrderItem> orderItems
     ){
         public OrderCriteria.Create toCriteria(){
             return new OrderCriteria.Create(
                     this.userId,
+                    this.userCouponId,
                     this.orderItems.stream()
                         .map(OrderItem::toCriteria)
                         .toList());

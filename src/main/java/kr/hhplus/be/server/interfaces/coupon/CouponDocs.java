@@ -7,12 +7,11 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import kr.hhplus.be.server.interfaces.common.PageResponse;
 import kr.hhplus.be.server.interfaces.product.ProductResponse;
 import kr.hhplus.be.server.support.exception.ErrorResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
-
-import java.util.List;
 
 @Tag(name = "coupon", description = "coupon API")
 public interface CouponDocs {
@@ -111,5 +110,7 @@ public interface CouponDocs {
                     )
             )
     })
-    public ResponseEntity<List<CouponResponse>> coupons(@PathVariable Long userId);
+    public ResponseEntity<PageResponse<CouponResponse>> coupons(
+            @PathVariable Long userId
+            , CouponRequest.Coupons request);
 }

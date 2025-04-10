@@ -1,5 +1,6 @@
 package kr.hhplus.be.server.domain.product;
 
+import kr.hhplus.be.server.support.exception.NotEnoughStockException;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -15,13 +16,13 @@ public class Product {
 
     public void validate(int deductAmount){
         if(stock - deductAmount < 0){
-            throw new IllegalArgumentException("재고가 부족합니다.");
+            throw new NotEnoughStockException();
         }
     }
 
     public void deductStock(int amount){
         if(stock - amount < 0){
-            throw new IllegalArgumentException("재고가 부족합니다.");
+            throw new NotEnoughStockException();
         }
         stock -= amount;
     }

@@ -39,9 +39,9 @@ class OrderControllerTest {
     @DisplayName("정상적인 요청으로 주문/결제를 요청했을 때 200을 반환된다.")
     void post_api_v1_orders_200() throws Exception {
         // given
-        OrderRequest.Create req = new OrderRequest.Create(1L, List.of(new OrderRequest.OrderItem(1L, 1)));
+        OrderRequest.Create req = new OrderRequest.Create(1L, 1L, List.of(new OrderRequest.OrderItem(1L, 1)));
         OrderCriteria.Create criteria = req.toCriteria();
-        OrderResult result = new OrderResult(1L, 1L, 5000, 5000);
+        OrderResult result = new OrderResult(1L, 1L, 5000, 3000);
         when(orderFacade.order(criteria)).thenReturn(result);
 
         // when //then
@@ -53,7 +53,7 @@ class OrderControllerTest {
                 .andExpect(jsonPath("$.orderId").value(1L))
                 .andExpect(jsonPath("$.paymentId").value(1L))
                 .andExpect(jsonPath("$.orderTotalAmount").value(5000))
-                .andExpect(jsonPath("$.paymentTotalAmount").value(5000))
+                .andExpect(jsonPath("$.paymentTotalAmount").value(3000))
         ;
     }
 

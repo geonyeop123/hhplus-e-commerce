@@ -28,7 +28,7 @@ class OrderProductTest {
         // given
         Product product = Product.create(1L, "사과", 50, 5000);
         OrderProduct orderProduct = OrderProduct.create(product, 1);
-        Order order = Order.create(User.create(1L, "yeop"));
+        Order order = Order.create(User.create(1L, "yeop"), DiscountInfo.empty());
         // when
         orderProduct.setOrder(order);
 

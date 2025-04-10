@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -24,6 +25,10 @@ public class ProductService {
         long totalCount = productRepository.findProductCount();
 
         List<Product> products = productRepository.findAll(command);
+
+        if(null == products){
+            products = new ArrayList<>();
+        }
 
         return PageResult.create(products, command.pageNo(), command.pageSize(), totalCount);
     }

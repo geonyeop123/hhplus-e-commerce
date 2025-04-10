@@ -1,6 +1,8 @@
 package kr.hhplus.be.server.domain.point;
 
 import kr.hhplus.be.server.domain.user.User;
+import kr.hhplus.be.server.support.exception.InsufficientBalanceException;
+import kr.hhplus.be.server.support.exception.MaximumBalanceException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -50,7 +52,7 @@ class PointTest {
 
             // when // then
             assertThatThrownBy(() -> point.charge(amount))
-                    .isInstanceOf(IllegalArgumentException.class)
+                    .isInstanceOf(MaximumBalanceException.class)
                     .hasMessage("충전 이후 포인트는 10,000,000포인트를 넘을 수 없습니다.");
         }
     }
@@ -96,12 +98,12 @@ class PointTest {
 
             // when // then
             assertThatThrownBy(() -> point.use(amount))
-                    .isInstanceOf(IllegalArgumentException.class)
+                    .isInstanceOf(InsufficientBalanceException.class)
                     .hasMessage("보유 포인트가 부족합니다.");
         }
     }
 
     private Point createPoint(int balance){
-        return Point.create(User.create(1L, "yeop"), balance);
+        return Point.create(1L, User.create(1L, "yeop"), balance);
     }
 }

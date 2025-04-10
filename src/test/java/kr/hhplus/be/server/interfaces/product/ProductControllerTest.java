@@ -74,7 +74,9 @@ class ProductControllerTest {
         when(productService.findAll(command)).thenReturn(result);
 
         //when //then
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/products?pageNo=1&pageSize=10&pageCount=10"))
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/products")
+                        .queryParam("pageNo", String.valueOf(req.pageNo()))
+                        .queryParam("pageSize", String.valueOf(req.pageSize())))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.content").isArray())

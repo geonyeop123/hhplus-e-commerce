@@ -91,6 +91,6 @@ class PointControllerTest {
     }
 
     private Point createPoint(Long userId, int balance){
-        return Point.create(User.create(userId, "yeop"), balance);
+        return Point.create(1L, User.create(userId, "yeop"), balance);
     }
 }

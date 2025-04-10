@@ -33,7 +33,7 @@ class PointServiceTest {
             Long userId = 1L;
             User user = User.create(userId, "yeop");
             when(pointRepository.findById(userId))
-                    .thenReturn(Optional.of(Point.create(user, 0)));
+                    .thenReturn(Optional.of(Point.create(1L, user, 0)));
 
             // when
             Point point = pointService.find(userId);
@@ -68,7 +68,7 @@ class PointServiceTest {
             Long userId = 1L;
             User user = User.create(userId, "yeop");
             int originalAmount = 10;
-            Point point = Point.create(user, originalAmount);
+            Point point = Point.create(1L, user, originalAmount);
             int chargeAmount = 10;
             when(pointRepository.findById(userId)).thenReturn(Optional.of(point));
             when(pointRepository.save(point)).thenReturn(point);

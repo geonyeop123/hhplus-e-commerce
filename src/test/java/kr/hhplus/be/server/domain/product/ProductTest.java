@@ -1,5 +1,6 @@
 package kr.hhplus.be.server.domain.product;
 
+import kr.hhplus.be.server.support.exception.NotEnoughStockException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -36,7 +37,7 @@ class ProductTest {
 
             // when // then
             assertThatThrownBy(() -> product.deductStock(deductAmount))
-                    .isInstanceOf(IllegalArgumentException.class)
+                    .isInstanceOf(NotEnoughStockException.class)
                     .hasMessage("재고가 부족합니다.");
         }
     }
@@ -53,7 +54,7 @@ class ProductTest {
 
             // when // then
             assertThatThrownBy(() -> product.validate(deductAmount))
-                    .isInstanceOf(IllegalArgumentException.class)
+                    .isInstanceOf(NotEnoughStockException.class)
                     .hasMessage("재고가 부족합니다.");
         }
     }

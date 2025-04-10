@@ -7,6 +7,7 @@ import java.util.List;
 
 public record OrderCommand(
         User user,
+        DiscountInfo discountInfo,
         List<OrderLine> orderLines
 ) {
     public record OrderLine(
