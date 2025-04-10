@@ -7,12 +7,10 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import kr.hhplus.be.server.interfaces.product.response.ProductResponse;
+import kr.hhplus.be.server.interfaces.common.PageResponse;
 import kr.hhplus.be.server.support.exception.ErrorResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
-
-import java.util.List;
 
 @Tag(name = "product", description = "product API")
 public interface ProductDocs {
@@ -75,5 +73,5 @@ public interface ProductDocs {
             """)
             )
     )
-    public ResponseEntity<List<ProductResponse>> products();
+    public ResponseEntity<PageResponse<ProductResponse>> products(ProductRequest.Products request);
 }

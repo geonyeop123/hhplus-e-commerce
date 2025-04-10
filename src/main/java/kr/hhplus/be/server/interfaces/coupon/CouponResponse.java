@@ -1,4 +1,4 @@
-package kr.hhplus.be.server.interfaces.coupon.response;
+package kr.hhplus.be.server.interfaces.coupon;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;

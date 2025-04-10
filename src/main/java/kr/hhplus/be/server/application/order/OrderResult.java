@@ -1,9 +1,10 @@
-package kr.hhplus.be.server.interfaces.order.response;
+package kr.hhplus.be.server.application.order;
 
-public record OrderResponse(
+public record OrderResult(
         Long orderId,
         Long paymentId,
         int orderTotalAmount,
         int paymentTotalAmount
 ) {
+
 }

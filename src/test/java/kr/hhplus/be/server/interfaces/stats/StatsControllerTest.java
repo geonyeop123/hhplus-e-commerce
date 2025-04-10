@@ -24,8 +24,8 @@ class StatsControllerTest {
         mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/stats/products/popular"))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$").isArray())
-                .andExpect(jsonPath("$.length()").value(5))
+                .andExpect(jsonPath("$.products").isArray())
+                .andExpect(jsonPath("$.products.length()").value(5))
                 ;
     }
 

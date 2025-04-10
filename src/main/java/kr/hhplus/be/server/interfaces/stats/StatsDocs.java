@@ -7,10 +7,8 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import kr.hhplus.be.server.interfaces.product.response.ProductResponse;
+import kr.hhplus.be.server.interfaces.product.ProductResponse;
 import org.springframework.http.ResponseEntity;
-
-import java.util.List;
 
 @Tag(name = "stats", description = "stats API")
 public interface StatsDocs {
@@ -62,5 +60,5 @@ public interface StatsDocs {
                     )
             )
     })
-    public ResponseEntity<List<ProductResponse>> popularProduct();
+    public ResponseEntity<StatsResponse.PopularSalesCount> popularProduct();
 }

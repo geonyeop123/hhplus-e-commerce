@@ -9,8 +9,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import kr.hhplus.be.server.interfaces.point.request.PointChargeRequest;
-import kr.hhplus.be.server.interfaces.point.response.PointResponse;
 import kr.hhplus.be.server.support.exception.ErrorResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -92,7 +90,7 @@ public interface PointDocs {
                     required = true,
                     content = @Content(
                             mediaType = "application/json",
-                            schema = @Schema(implementation = PointChargeRequest.class),
+                            schema = @Schema(implementation = PointRequest.class),
                             examples = @ExampleObject(value = """
                     {
                       "amount": 10000
@@ -100,5 +98,5 @@ public interface PointDocs {
                     """)
                     )
             )
-            @RequestBody PointChargeRequest request);
+            @RequestBody PointRequest.Charge request);
 }

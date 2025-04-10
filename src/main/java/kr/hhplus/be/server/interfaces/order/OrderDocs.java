@@ -7,9 +7,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import kr.hhplus.be.server.interfaces.order.request.CreateOrderRequest;
-import kr.hhplus.be.server.interfaces.order.response.OrderResponse;
-import kr.hhplus.be.server.interfaces.point.request.PointChargeRequest;
+import kr.hhplus.be.server.interfaces.point.PointRequest;
 import kr.hhplus.be.server.support.exception.ErrorResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -59,7 +57,7 @@ public interface OrderDocs {
                     required = true,
                     content = @Content(
                             mediaType = "application/json",
-                            schema = @Schema(implementation = PointChargeRequest.class),
+                            schema = @Schema(implementation = PointRequest.class),
                             examples = @ExampleObject(value = """
                     {
                       "userId": 1,
@@ -72,5 +70,5 @@ public interface OrderDocs {
                     """)
                     )
             )
-            @RequestBody CreateOrderRequest request);
+            @RequestBody OrderRequest.Create request);
 }

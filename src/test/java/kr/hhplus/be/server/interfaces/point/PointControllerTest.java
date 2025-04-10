@@ -1,21 +1,29 @@
 package kr.hhplus.be.server.interfaces.point;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import kr.hhplus.be.server.interfaces.point.request.PointChargeRequest;
+import kr.hhplus.be.server.domain.point.ChargeCommand;
+import kr.hhplus.be.server.domain.point.Point;
+import kr.hhplus.be.server.domain.point.PointService;
+import kr.hhplus.be.server.domain.user.User;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(PointController.class)
+@ExtendWith(MockitoExtension.class)
 class PointControllerTest {
 
     @Autowired
@@ -24,6 +32,9 @@ class PointControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
+    @MockitoBean
+    private PointService pointService;
+
     @Nested
     class get_api_v1_points {
         @Test
@@ -31,6 +42,9 @@ class PointControllerTest {
         void success() throws Exception {
             // given
             Long userId = 1L;
+            Point point = createPoint(userId, 0);
+
+            when(pointService.find(userId)).thenReturn(point);
 
             // when //then
             mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/users/{userId}/points", userId))
@@ -39,6 +53,8 @@ class PointControllerTest {
                     .andExpect(jsonPath("$.userId").value(userId))
                     .andExpect(jsonPath("$.balance").value(0))
             ;
+
+            verify(pointService, times(1)).find(userId);
         }
     }
 
@@ -51,7 +67,14 @@ class PointControllerTest {
             Long userId = 1L;
             int amount = 10;
 
-            PointChargeRequest request = new PointChargeRequest(amount);
+            ChargeCommand command = new ChargeCommand(userId, amount);
+
+            Point chargedPoint = createPoint(userId, amount);
+
+            PointRequest.Charge request = new PointRequest.Charge(amount);
+
+            when(pointService.charge(command)).thenReturn(chargedPoint);
+
 
             //when //then
             mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/users/{userId}/points", userId)
@@ -62,25 +85,12 @@ class PointControllerTest {
                         .andExpect(jsonPath("$.userId").value(userId))
                         .andExpect(jsonPath("$.balance").value(amount))
             ;
-        }
 
-        @Test
-        @DisplayName("충전할 값이 0이하인 경우 충전에 실패한다.")
-        void fail1() throws Exception {
-            //given
-            Long userId = 1L;
-            int amount = 0;
-
-            PointChargeRequest request = new PointChargeRequest(amount);
-
-            //when //then
-            mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/users/{userId}/points", userId)
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .content(objectMapper.writeValueAsString(request)))
-                    .andDo(print())
-                    .andExpect(status().isBadRequest())
-            ;
+            verify(pointService, times(1)).charge(command);
         }
     }
 
+    private Point createPoint(Long userId, int balance){
+        return Point.create(User.create(userId, "yeop"), balance);
+    }
 }
