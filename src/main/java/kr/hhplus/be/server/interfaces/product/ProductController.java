@@ -25,7 +25,7 @@ public class ProductController implements ProductDocs{
 
     @GetMapping("/api/v1/products")
     public ResponseEntity<PageResponse<ProductResponse>> products(ProductRequest.Products request) {
-        ProductCommand command = request.toCommand();
+        ProductCommand.FindAll command = request.toCommand();
 
         PageResult<Product> result = productService.findAll(command);
 

@@ -1,9 +1,9 @@
 package kr.hhplus.be.server.domain.payment;
 
-import kr.hhplus.be.server.domain.order.DiscountInfo;
 import kr.hhplus.be.server.domain.order.Order;
 import kr.hhplus.be.server.domain.order.OrderProduct;
 import kr.hhplus.be.server.domain.product.Product;
+import kr.hhplus.be.server.domain.product.ProductInfo;
 import kr.hhplus.be.server.domain.user.User;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -16,8 +16,8 @@ class PaymentTest {
     @Test
     void createByOrder() {
         // given
-        User user = User.create(1L, "yeop");
-        Order order = Order.create(user, DiscountInfo.empty());
+        User user = User.create("yeop");
+        Order order = Order.create(user);
         // when
         Payment payment = Payment.createByOrder(order);
 
@@ -29,10 +29,9 @@ class PaymentTest {
     @Test
     void totalAmountEqualToFinalAmount() {
         // given
-        User user = User.create(1L, "yeop");
-        Order order = Order.create(user, DiscountInfo.empty());
-        order.addOrderProduct(OrderProduct.create(makeProduct(1L, 5000), 1));
-        order.calculateTotalAmount();
+        User user = User.create("yeop");
+        Order order = Order.create(user);
+        order.addOrderProduct(OrderProduct.create(makeProduct(5000), 1));
         // when
         Payment payment = Payment.createByOrder(order);
 
@@ -41,8 +40,8 @@ class PaymentTest {
     }
 
 
-    private static Product makeProduct(Long productId, int price) {
-        return Product.create(productId, "사과", 50, price);
+    private static ProductInfo makeProduct(int price) {
+        return ProductInfo.from(Product.create("사과", 50, price));
     }
 
 }

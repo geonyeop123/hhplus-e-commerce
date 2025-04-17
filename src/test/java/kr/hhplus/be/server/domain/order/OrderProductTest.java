@@ -1,6 +1,7 @@
 package kr.hhplus.be.server.domain.order;
 
 import kr.hhplus.be.server.domain.product.Product;
+import kr.hhplus.be.server.domain.product.ProductInfo;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -12,13 +13,14 @@ class OrderProductTest {
     @Test
     void createOrderProduct() {
         // given
-        Product product = Product.create(1L, "사과", 50, 5000);
+        ProductInfo productInfo = ProductInfo.from(Product.create( "사과", 50, 5000));
 
         // when
-        OrderProduct orderProduct = OrderProduct.create(product, 1);
+        OrderProduct orderProduct = OrderProduct.create(productInfo, 1);
 
         // then
-        assertThat(orderProduct.getPrice()).isEqualTo(product.getPrice());
+        assertThat(orderProduct.getPrice()).isEqualTo(productInfo.price());
+        assertThat(orderProduct.getName()).isEqualTo(productInfo.name());
     }
 
 }

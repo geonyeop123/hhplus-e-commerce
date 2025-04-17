@@ -1,6 +1,9 @@
 package kr.hhplus.be.server.domain.userCoupon;
 
 import kr.hhplus.be.server.domain.common.PageResult;
+import kr.hhplus.be.server.domain.coupon.Coupon;
+import kr.hhplus.be.server.domain.coupon.CouponType;
+import kr.hhplus.be.server.domain.coupon.DiscountType;
 import kr.hhplus.be.server.domain.user.User;
 import kr.hhplus.be.server.domain.user.UserService;
 import org.junit.jupiter.api.DisplayName;
@@ -10,6 +13,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.*;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -36,15 +40,19 @@ class UserCouponServiceTest {
     void findAllByUserId() {
         // given
         Long userId = 1L;
-        User user = User.create(userId, "yeop");
+        User user = User.create("yeop");
         UserCouponCommand.FindAll command = new UserCouponCommand.FindAll(userId, 1, 10);
+
         List<UserCoupon> userCoupons = List.of(
-                UserCoupon.builder().id(1L).userId(1L).couponId(1L).build()
-                , UserCoupon.builder().id(2L).userId(1L).couponId(1L).build()
+                UserCoupon.builder().userId(1L).couponId(1L).build()
+                , UserCoupon.builder().userId(1L).couponId(1L).build()
         );
-        when(userService.findByUserId(userId)).thenReturn(user);
-        when(userCouponRepository.findCountByUserId(userId)).thenReturn(2L);
-        when(userCouponRepository.findAllByUserId(command)).thenReturn(userCoupons);
+
+        when(userService.findById(userId)).thenReturn(user);
+
+        Pageable pageable = PageRequest.of(command.pageNo() - 1, command.pageSize(), Sort.by("createdAt").descending());
+        Page<UserCoupon> pageResult = new PageImpl<>(userCoupons, pageable, userCoupons.size());
+        when(userCouponRepository.findAllByUserId(userId, pageable)).thenReturn(pageResult);
 
         // when
         PageResult<UserCoupon> result = userCouponService.findAllByUserId(command);
@@ -56,9 +64,25 @@ class UserCouponServiceTest {
         assertThat(result.totalCount()).isEqualTo(2);
         assertThat(result.totalPages()).isEqualTo(1);
 
-        verify(userService, times(1)).findByUserId(userId);
-        verify(userCouponRepository, times(1)).findCountByUserId(userId);
-        verify(userCouponRepository, times(1)).findAllByUserId(command);
+        verify(userService, times(1)).findById(userId);
+        verify(userCouponRepository, times(1)).findAllByUserId(userId, pageable);
+    }
+
+    @DisplayName("user와 Coupon으로 user에게 userCoupon을 발급할 수 있다.")
+    @Test
+    void issue() {
+        // given
+        User user = User.create("yeop");
+        Coupon coupon = Coupon.create("4월 반짝 쿠폰", CouponType.TOTAL, DiscountType.FIXED, 5000, 3, LocalDate.now(), LocalDate.now().plusDays(3), 50);
+        UserCoupon userCoupon = UserCoupon.builder().userId(1L).couponId(1L).build();
+        UserCouponCommand.Issue command = new UserCouponCommand.Issue(user, coupon);
+        when(userCouponRepository.save(any(UserCoupon.class))).thenReturn(userCoupon);
+        // when
+
+        userCouponService.issue(command);
+
+        // then
+        verify(userCouponRepository, times(1)).save(any(UserCoupon.class));
     }
 
     @Nested
@@ -68,7 +92,7 @@ class UserCouponServiceTest {
         void findByIdSuccess() {
             // given
             Long userCouponId = 1L;
-            UserCoupon userCoupon = UserCoupon.builder().id(1L).couponId(1L).name("깜짝 쿠폰").discountAmount(5000).build();
+            UserCoupon userCoupon = UserCoupon.builder().couponId(1L).name("깜짝 쿠폰").discountAmount(5000).build();
             when(userCouponRepository.findById(userCouponId)).thenReturn(Optional.of(userCoupon));
 
             // when
@@ -92,28 +116,47 @@ class UserCouponServiceTest {
         }
     }
 
+    @DisplayName("유효성 검사를 진행한 유저쿠폰 정보를 조회할 수 있다.")
+    @Test
+    void validateAndGetInfo() {
+        // given
+        Long userId = 1L;
+        Long userCouponId = 1L;
+        UserCoupon userCoupon =
+                UserCoupon.builder().userId(userId).couponId(1L)
+                        .name("깜짝 쿠폰").expiredAt(LocalDate.now()
+                                .plusMonths(3)).discountAmount(5000).build();
+        when(userCouponRepository.findById(userCouponId)).thenReturn(Optional.of(userCoupon));
+        UserCouponCommand.Validate command = new UserCouponCommand.Validate(userId, userCouponId);
+
+        // when
+        UserCouponInfo validatedUserCoupon = userCouponService.validateAndGetInfo(command);
+
+        // then
+        assertThat(validatedUserCoupon).isNotNull();
+        verify(userCouponRepository, times(1)).findById(userCouponId);
+    }
+
     @DisplayName("쿠폰 사용처리를 할 수 있다.")
     @Test
     void use() {
         // given
         Long userId = 1L;
         Long userCouponId = 1L;
-        Long orderId = 1L;
         UserCoupon userCoupon =
-                UserCoupon.builder().id(1L).userId(userId).couponId(1L)
+                UserCoupon.builder().userId(userId).couponId(1L)
                         .name("깜짝 쿠폰").expiredAt(LocalDate.now()
                         .plusMonths(3)).discountAmount(5000).build();
         when(userCouponRepository.findById(userCouponId)).thenReturn(Optional.of(userCoupon));
-        when(userCouponRepository.save(userCoupon)).thenReturn(userCoupon);
-        UserCouponCommand.Use command = new UserCouponCommand.Use(userId, userCouponId, 1L);
+        UserCouponCommand.Use command = new UserCouponCommand.Use(userId, userCouponId);
 
         // when
-        UserCoupon usedUserCoupon = userCouponService.use(command);
+        UserCouponInfo usedUserCoupon = userCouponService.use(command);
 
         // then
         assertThat(usedUserCoupon).isNotNull();
+        assertThat(usedUserCoupon.usedAt()).isNotNull();
         verify(userCouponRepository, times(1)).findById(userCouponId);
-        verify(userCouponRepository, times(1)).save(userCoupon);
     }
 
 }

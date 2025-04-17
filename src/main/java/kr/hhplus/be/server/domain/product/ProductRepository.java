@@ -1,13 +1,14 @@
 package kr.hhplus.be.server.domain.product;
 
-import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
 import java.util.Optional;
 
 public interface ProductRepository {
 
-    public Optional<Product> find(Long productId);
-    public long findProductCount();
-    public List<Product> findAll(ProductCommand command);
-    public Product save(Product product);
+    Optional<Product> find(Long id);
+    Page<Product> findAll(Pageable pageable);
+    Product save(Product product);
 
 }

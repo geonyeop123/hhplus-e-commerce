@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -103,10 +104,9 @@ class UserCouponTest {
                     .couponId(1L)
                     .name("깜짝 쿠폰")
                     .discountAmount(5000)
-                    .expiredAt(LocalDate.now().minusDays(1))
+                    .expiredAt(LocalDate.now().plusDays(1))
+                    .usedAt(LocalDateTime.now().minusDays(1))
                     .build();
-
-            userCoupon.use(1L, 1L);
 
             // when // then
             assertThatThrownBy(() -> userCoupon.validate(userId))
@@ -134,7 +134,7 @@ class UserCouponTest {
                     .build();
 
             // when
-            userCoupon.use(userId, orderId);
+            userCoupon.use(userId);
 
             // then
             assertThat(userCoupon.getUsedAt()).isNotNull();
@@ -157,7 +157,7 @@ class UserCouponTest {
             Long differentUserId = 2L;
 
             // when // then
-            assertThatThrownBy(() -> userCoupon.use(differentUserId, orderId))
+            assertThatThrownBy(() -> userCoupon.use(differentUserId))
                     .isInstanceOf(IllegalArgumentException.class)
                     .hasMessage("보유 중인 쿠폰이 아닙니다.");;
         }
@@ -177,7 +177,7 @@ class UserCouponTest {
                     .build();
 
             // when // then
-            assertThatThrownBy(() -> userCoupon.use(userId, orderId))
+            assertThatThrownBy(() -> userCoupon.use(userId))
                     .isInstanceOf(ExpiredException.class)
                     .hasMessage("유효기간이 만료된 쿠폰입니다.");
         }
@@ -192,10 +192,9 @@ class UserCouponTest {
                     .couponId(1L)
                     .name("깜짝 쿠폰")
                     .discountAmount(5000)
-                    .expiredAt(LocalDate.now().minusDays(1))
+                    .expiredAt(LocalDate.now().plusDays(1))
+                    .usedAt(LocalDateTime.now().minusDays(1))
                     .build();
-
-            userCoupon.use(1L, 1L);
 
             // when // then
             assertThatThrownBy(() -> userCoupon.validate(userId))

@@ -1,10 +1,15 @@
 package kr.hhplus.be.server.domain.product;
 
 public record ProductCommand(
-        int pageNo,
-        int pageSize
 ) {
-    int getOffset(){
-        return (pageNo - 1) * pageSize;
+    public record FindAll(int pageNo, int pageSize) {
+    }
+
+    public record ValidatePurchase(Long productId, int quantity) {
+
+    }
+
+    public record DeductStock(Long productId, int quantity) {
+
     }
 }

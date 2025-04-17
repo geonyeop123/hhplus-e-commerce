@@ -1,15 +1,13 @@
 package kr.hhplus.be.server.interfaces.point;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import kr.hhplus.be.server.domain.point.ChargeCommand;
 import kr.hhplus.be.server.domain.point.Point;
+import kr.hhplus.be.server.domain.point.PointCommand;
 import kr.hhplus.be.server.domain.point.PointService;
 import kr.hhplus.be.server.domain.user.User;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.http.MediaType;
@@ -23,7 +21,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(PointController.class)
-@ExtendWith(MockitoExtension.class)
 class PointControllerTest {
 
     @Autowired
@@ -42,7 +39,7 @@ class PointControllerTest {
         void success() throws Exception {
             // given
             Long userId = 1L;
-            Point point = createPoint(userId, 0);
+            Point point = createPoint(0);
 
             when(pointService.find(userId)).thenReturn(point);
 
@@ -50,7 +47,6 @@ class PointControllerTest {
             mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/users/{userId}/points", userId))
                     .andDo(print())
                     .andExpect(status().isOk())
-                    .andExpect(jsonPath("$.userId").value(userId))
                     .andExpect(jsonPath("$.balance").value(0))
             ;
 
@@ -67,11 +63,10 @@ class PointControllerTest {
             Long userId = 1L;
             int amount = 10;
 
-            ChargeCommand command = new ChargeCommand(userId, amount);
-
-            Point chargedPoint = createPoint(userId, amount);
+            Point chargedPoint = createPoint(amount);
 
             PointRequest.Charge request = new PointRequest.Charge(amount);
+            PointCommand.Charge command = request.toCommand(userId);
 
             when(pointService.charge(command)).thenReturn(chargedPoint);
 
@@ -82,7 +77,6 @@ class PointControllerTest {
                             .content(objectMapper.writeValueAsString(request)))
                         .andDo(print())
                         .andExpect(status().isOk())
-                        .andExpect(jsonPath("$.userId").value(userId))
                         .andExpect(jsonPath("$.balance").value(amount))
             ;
 
@@ -90,7 +84,7 @@ class PointControllerTest {
         }
     }
 
-    private Point createPoint(Long userId, int balance){
-        return Point.create(1L, User.create(userId, "yeop"), balance);
+    private Point createPoint(int balance){
+        return Point.create(User.create("yeop"), balance);
     }
 }

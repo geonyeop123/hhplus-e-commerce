@@ -17,7 +17,7 @@ public record OrderRequest(
                     this.userId,
                     this.userCouponId,
                     this.orderItems.stream()
-                        .map(OrderItem::toCriteria)
+                        .map(OrderRequest.OrderItem::toCriteria)
                         .toList());
         }
     }
@@ -26,8 +26,8 @@ public record OrderRequest(
             Long productId,
             int quantity
     ) {
-        OrderCriteria.Create.OrderLine toCriteria(){
-            return new OrderCriteria.Create.OrderLine(productId, quantity);
+        OrderCriteria.Create.OrderItem toCriteria(){
+            return new OrderCriteria.Create.OrderItem(productId, quantity);
         }
     }
 }

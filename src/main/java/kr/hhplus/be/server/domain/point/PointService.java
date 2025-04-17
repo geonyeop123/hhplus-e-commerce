@@ -7,33 +7,29 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
 public class PointService {
 
     private final PointRepository pointRepository;
 
+    @Transactional(readOnly = true)
     public Point find(Long userId) {
-        return pointRepository.findById(userId)
+        return pointRepository.findByUserId(userId)
                 .orElseThrow(() -> new IllegalArgumentException("등록되지 않은 회원입니다."));
     }
 
     @Transactional
-    public Point charge(ChargeCommand command) {
+    public Point charge(PointCommand.Charge command) {
 
         Point point = find(command.userId());
         point.charge(command.amount());
 
-        pointRepository.save(point);
-
         return point;
     }
 
-    public Point use(Long userId, int amount) {
-        Point point = find(userId);
+    public Point use(PointCommand.Use command) {
+        Point point = find(command.userId());
 
-        point.use(amount);
-        pointRepository.save(point);
-
+        point.use(command.amount());
         return point;
     }
 }

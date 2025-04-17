@@ -1,19 +1,24 @@
 package kr.hhplus.be.server.domain.order;
 
-import kr.hhplus.be.server.domain.product.Product;
+import kr.hhplus.be.server.domain.product.ProductInfo;
 import kr.hhplus.be.server.domain.user.User;
+import kr.hhplus.be.server.domain.userCoupon.UserCouponInfo;
 
 import java.util.List;
 
 public record OrderCommand(
-        User user,
-        DiscountInfo discountInfo,
-        List<OrderLine> orderLines
 ) {
     public record OrderLine(
-            Product product,
+            ProductInfo product,
             int quantity
     ) {
 
+    }
+
+    public record Create(
+            User user,
+            UserCouponInfo userCouponInfo,
+            List<OrderLine> orderLines
+    ) {
     }
 }

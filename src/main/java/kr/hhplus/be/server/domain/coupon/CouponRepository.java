@@ -1,6 +1,7 @@
 package kr.hhplus.be.server.domain.coupon;
 
+import java.util.Optional;
+
 public interface CouponRepository {
-    Coupon findById(Long aLong);
-    Coupon save(Coupon coupon);
+    Optional<Coupon> findById(Long aLong);
 }

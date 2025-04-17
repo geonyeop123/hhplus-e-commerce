@@ -2,7 +2,7 @@ package kr.hhplus.be.server.interfaces.point;
 
 
 import jakarta.validation.Valid;
-import kr.hhplus.be.server.domain.point.ChargeCommand;
+import kr.hhplus.be.server.domain.point.PointCommand;
 import kr.hhplus.be.server.domain.point.PointService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -24,7 +24,7 @@ public class PointController implements PointDocs{
     @PostMapping("/api/v1/users/{userId}/points")
     public ResponseEntity<PointResponse> charge(@PathVariable Long userId,
                                                 @Valid @RequestBody PointRequest.Charge request) {
-        ChargeCommand command = request.toCommand(userId);
+        PointCommand.Charge command = request.toCommand(userId);
         return ResponseEntity.ok(PointResponse.from(pointService.charge(command)));
     }
 

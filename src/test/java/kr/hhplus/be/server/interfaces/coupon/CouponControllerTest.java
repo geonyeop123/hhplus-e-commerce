@@ -1,7 +1,9 @@
 package kr.hhplus.be.server.interfaces.coupon;
 
+import kr.hhplus.be.server.application.coupon.CouponCriteria;
+import kr.hhplus.be.server.application.coupon.CouponFacade;
+import kr.hhplus.be.server.application.coupon.CouponResult;
 import kr.hhplus.be.server.domain.common.PageResult;
-import kr.hhplus.be.server.domain.coupon.CouponCommand;
 import kr.hhplus.be.server.domain.coupon.CouponService;
 import kr.hhplus.be.server.domain.userCoupon.UserCoupon;
 import kr.hhplus.be.server.domain.userCoupon.UserCouponCommand;
@@ -32,6 +34,9 @@ class CouponControllerTest {
     private MockMvc mockMvc;
 
     @MockitoBean
+    private CouponFacade couponFacade;
+
+    @MockitoBean
     private CouponService couponService;
 
     @MockitoBean
@@ -43,25 +48,17 @@ class CouponControllerTest {
         // given
         Long userId = 1L;
         Long couponId = 1L;
-        CouponCommand command = new CouponCommand(userId, couponId);
-        UserCoupon res = UserCoupon.builder()
-                .id(1L)
-                .userId(userId)
-                .couponId(couponId)
-                .name("4월 반짝 쿠폰")
-                .discountAmount(5000)
-                .expiredAt(LocalDate.of(2025, 4, 20))
-                .build();
-        when(couponService.issue(command)).thenReturn(res);
+        CouponCriteria.IssueUserCoupon criteria = new CouponCriteria.IssueUserCoupon(userId, couponId);
+        CouponResult.IssueUserCoupon result  =new CouponResult.IssueUserCoupon(1L, "4월 반짝 쿠폰", 5000, LocalDate.of(2025, 4, 20));
+        when(couponFacade.issueUserCoupon(criteria)).thenReturn(result);
 
         // when // then
         mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/users/{userId}/coupons/{couponId}", userId, couponId))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.userId").value(userId))
-                .andExpect(jsonPath("$.userCouponId").value(res.getId()))
-                .andExpect(jsonPath("$.name").value(res.getName()))
-                .andExpect(jsonPath("$.discountAmount").value(res.getDiscountAmount()))
+                .andExpect(jsonPath("$.userCouponId").value(result.id()))
+                .andExpect(jsonPath("$.name").value(result.name()))
+                .andExpect(jsonPath("$.discountAmount").value(result.discountAmount()))
                 .andExpect(jsonPath("$.expirationAt").value("2025-04-20"))
         ;
     }
@@ -73,7 +70,6 @@ class CouponControllerTest {
         Long userId = 1L;
         UserCouponCommand.FindAll command = new UserCouponCommand.FindAll(userId, 1, 10);
         UserCoupon userCoupon = UserCoupon.builder()
-                .id(1L)
                 .userId(userId)
                 .couponId(1L)
                 .name("4월 반짝 쿠폰")

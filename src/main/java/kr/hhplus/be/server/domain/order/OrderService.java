@@ -9,21 +9,16 @@ public class OrderService {
 
     private final OrderRepository orderRepository;
 
-    public Order order(OrderCommand command) {
-        Order order = Order.create(command.user(), command.discountInfo());
+    public Order order(OrderCommand.Create command) {
+        Order order = Order.create(command.user());
 
         command.orderLines().stream()
-                    .map(orderProduct ->
-                            OrderProduct.create(orderProduct.product(), orderProduct.quantity()))
+                    .map(orderLine -> OrderProduct.create(orderLine.product(), orderLine.quantity()))
                     .forEach(order::addOrderProduct);
 
-        order.calculateTotalAmount();
-
-        return orderRepository.save(order);
-    }
-
-    public Order complete(Order order){
+        order.applyCoupon(command.userCouponInfo());
         order.complete();
+
         return orderRepository.save(order);
     }
 }

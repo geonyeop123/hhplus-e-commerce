@@ -1,23 +1,30 @@
 package kr.hhplus.be.server.domain.user;
 
+import jakarta.persistence.*;
+import kr.hhplus.be.server.domain.common.BaseEntity;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.util.Objects;
 
 @Getter
-@NoArgsConstructor
-public class User {
+@Entity
+@Table(name = "users")
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+public class User extends BaseEntity {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String name;
 
-    public static User create(Long id, String name) {
-        return new User(id, name);
+    public static User create(String name) {
+        return new User(name);
     }
 
-    private User(Long id, String name) {
-        this.id = id;
+    private User(String name) {
         this.name = name;
     }
 
@@ -26,11 +33,11 @@ public class User {
         if (o == null || getClass() != o.getClass()) return false;
 
         User user = (User) o;
-        return Objects.equals(id, user.id) && Objects.equals(name, user.name);
+        return Objects.equals(id, user.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name);
+        return Objects.hashCode(id);
     }
 }

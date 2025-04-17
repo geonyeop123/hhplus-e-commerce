@@ -5,7 +5,6 @@ import kr.hhplus.be.server.domain.common.PageResult;
 import kr.hhplus.be.server.domain.product.Product;
 import kr.hhplus.be.server.domain.product.ProductCommand;
 import kr.hhplus.be.server.domain.product.ProductService;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -36,19 +35,12 @@ class ProductControllerTest {
     @MockitoBean
     private ProductService productService;
 
-    private ProductResponse productResponse;
-
-    @BeforeEach
-    void setUp() {
-        productResponse = new ProductResponse(1L, "맥북", 50, 100000);
-    }
-
     @Test
     @DisplayName("productId에 해당하는 상품이 있는 경우 해당 상품을 반환한다.")
     void get_api_v1_products_have_id_200() throws Exception {
         //given
-        Long productId = productResponse.productId();
-        Product product = Product.create(productId,"사과",5000,50);
+        Long productId = 1L;
+        Product product = Product.create("사과",5000,50);
         when(productService.find(productId)).thenReturn(product);
 
         //when //then
@@ -66,10 +58,9 @@ class ProductControllerTest {
     @Test
     void get_api_v1_products_200() throws Exception{
         // given
-        ProductResponse response = productResponse;
         ProductRequest.Products req = new ProductRequest.Products(1, 10);
-        ProductCommand command = req.toCommand();
-        Product product = Product.create(1L,"사과",5000,50);
+        ProductCommand.FindAll command = req.toCommand();
+        Product product = Product.create("사과",5000,50);
         PageResult<Product> result = PageResult.create(List.of(product), command.pageNo(), command.pageSize(), 1);
         when(productService.findAll(command)).thenReturn(result);
 
@@ -86,7 +77,4 @@ class ProductControllerTest {
                 .andExpect(jsonPath("$.totalPages").value(result.totalPages()))
         ;
     }
-
-
-
 }

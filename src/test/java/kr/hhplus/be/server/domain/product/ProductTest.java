@@ -15,11 +15,10 @@ class ProductTest {
         @DisplayName("재고를 감소시킬 수 있다.")
         @Test
         void success() {
-
             // given
             int deductAmount = 10;
             int stock = 50;
-            Product product = Product.create(1L, "사과", stock, 5000);
+            Product product = Product.create( "사과", stock, 5000);
 
             // when
             product.deductStock(deductAmount);
@@ -33,7 +32,7 @@ class ProductTest {
             // given
             int deductAmount = 2;
             int stock = 1;
-            Product product = Product.create(1L, "사과", stock, 5000);
+            Product product = Product.create( "사과", stock, 5000);
 
             // when // then
             assertThatThrownBy(() -> product.deductStock(deductAmount))
@@ -43,17 +42,17 @@ class ProductTest {
     }
 
     @Nested
-    class validate {
+    class validatePurchasable {
         @DisplayName("재고가 없는 경우 IllegalArgumentException이 발생한다.")
         @Test
         void fail1() {
             // given
             int deductAmount = 2;
             int stock = 1;
-            Product product = Product.create(1L, "사과", stock, 5000);
+            Product product = Product.create( "사과", stock, 5000);
 
             // when // then
-            assertThatThrownBy(() -> product.validate(deductAmount))
+            assertThatThrownBy(() -> product.validatePurchasable(deductAmount))
                     .isInstanceOf(NotEnoughStockException.class)
                     .hasMessage("재고가 부족합니다.");
         }

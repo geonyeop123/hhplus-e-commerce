@@ -1,31 +1,50 @@
 package kr.hhplus.be.server.domain.userCoupon;
 
+import jakarta.persistence.*;
+import kr.hhplus.be.server.domain.common.BaseEntity;
+import kr.hhplus.be.server.domain.coupon.CouponType;
+import kr.hhplus.be.server.domain.coupon.DiscountType;
 import kr.hhplus.be.server.support.exception.AlreadyUsedException;
 import kr.hhplus.be.server.support.exception.ExpiredException;
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Getter
-public class UserCoupon {
+@Entity
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+public class UserCoupon extends BaseEntity {
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private Long userId;
     private Long couponId;
-    private Long orderId;
     private String name;
+
+    @Enumerated(EnumType.STRING)
+    private CouponType type;
+
+    @Enumerated(EnumType.STRING)
+    private DiscountType discountType;
+
     private int discountAmount;
+
     private LocalDateTime usedAt;
+
     private LocalDate expiredAt;
 
     @Builder
-    private UserCoupon(Long id, Long userId, Long couponId, String name, int discountAmount, LocalDateTime usedAt, LocalDate expiredAt) {
-        this.id = id;
+    private UserCoupon(Long userId, Long couponId, String name, CouponType type,
+                       DiscountType discountType, int discountAmount, LocalDateTime usedAt, LocalDate expiredAt) {
         this.userId = userId;
         this.couponId = couponId;
         this.name = name;
+        this.type = type;
+        this.discountType = discountType;
         this.discountAmount = discountAmount;
         this.usedAt = usedAt;
         this.expiredAt = expiredAt;
@@ -58,9 +77,8 @@ public class UserCoupon {
         return LocalDate.now().isAfter(this.expiredAt);
     }
 
-    public void use(Long userId, Long orderId) {
+    public void use(Long userId) {
         validate(userId);
-        this.orderId = orderId;
         this.usedAt = LocalDateTime.now();
     }
 

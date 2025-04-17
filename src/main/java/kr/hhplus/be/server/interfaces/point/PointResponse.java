@@ -7,6 +7,6 @@ public record PointResponse (
         int balance
 ){
     public static PointResponse from(Point point) {
-        return new PointResponse (point.getUser().getId(), point.getBalance());
+        return new PointResponse (point.getUserId(), point.getBalance());
     }
 }

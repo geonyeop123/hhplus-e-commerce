@@ -1,17 +1,22 @@
 package kr.hhplus.be.server.interfaces.coupon;
 
+import kr.hhplus.be.server.application.coupon.CouponResult;
 import kr.hhplus.be.server.domain.userCoupon.UserCoupon;
 
 import java.time.LocalDate;
 
 public record CouponResponse(
-        Long userId,
         Long userCouponId,
         String name,
         int discountAmount,
         LocalDate expirationAt
 ) {
+
     public static CouponResponse from(UserCoupon userCoupon) {
-        return new CouponResponse(userCoupon.getUserId(), userCoupon.getId(), userCoupon.getName(), userCoupon.getDiscountAmount(), userCoupon.getExpiredAt());
+        return new CouponResponse(userCoupon.getId(), userCoupon.getName(), userCoupon.getDiscountAmount(), userCoupon.getExpiredAt());
+    }
+
+    public static CouponResponse from(CouponResult.IssueUserCoupon result) {
+        return new CouponResponse(result.id(), result.name(), result.discountAmount(), result.expiredAt());
     }
 }

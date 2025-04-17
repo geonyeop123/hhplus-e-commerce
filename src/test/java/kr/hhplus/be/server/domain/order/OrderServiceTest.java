@@ -1,7 +1,9 @@
 package kr.hhplus.be.server.domain.order;
 
 import kr.hhplus.be.server.domain.product.Product;
+import kr.hhplus.be.server.domain.product.ProductInfo;
 import kr.hhplus.be.server.domain.user.User;
+import kr.hhplus.be.server.domain.userCoupon.UserCouponInfo;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -11,7 +13,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
@@ -28,12 +29,12 @@ class OrderServiceTest {
     @Test
     void order() {
         // given
-        User user = User.create(1L, "yeop");
-        Product product = Product.create(1L, "사과", 50, 5000);
+        User user = User.create("yeop");
+        ProductInfo product = ProductInfo.from(Product.create( "사과", 50, 5000));
         List<OrderCommand.OrderLine> orderLines =
                 List.of(new OrderCommand.OrderLine(product, 1));
 
-        OrderCommand command = new OrderCommand(user, DiscountInfo.empty(), orderLines);
+        OrderCommand.Create command = new OrderCommand.Create(user, UserCouponInfo.empty(), orderLines);
 
         when(orderRepository.save(any(Order.class))).thenReturn(any(Order.class));
 
@@ -41,21 +42,6 @@ class OrderServiceTest {
         orderService.order(command);
 
         // then
-        verify(orderRepository, times(1)).save(any(Order.class));
-    }
-
-    @DisplayName("완료 요청 시 Order의 status가 COMPLEATE가 된다.")
-    @Test
-    void test() {
-        // given
-        User user = User.create(1L, "yeop");
-        Order order = Order.create(user, DiscountInfo.empty());
-
-        // when
-        orderService.complete(order);
-
-        // then
-        assertThat(order.getStatus()).isEqualTo(OrderStatus.SUCCESS);
         verify(orderRepository, times(1)).save(any(Order.class));
     }
 

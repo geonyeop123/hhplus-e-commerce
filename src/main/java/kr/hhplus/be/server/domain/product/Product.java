@@ -1,5 +1,11 @@
 package kr.hhplus.be.server.domain.product;
 
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import kr.hhplus.be.server.domain.common.BaseEntity;
 import kr.hhplus.be.server.support.exception.NotEnoughStockException;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -7,14 +13,17 @@ import lombok.NoArgsConstructor;
 import java.util.Objects;
 
 @Getter
+@Entity
 @NoArgsConstructor
-public class Product {
+public class Product extends BaseEntity {
+
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
     private int stock;
     private int price;
 
-    public void validate(int deductAmount){
+    public void validatePurchasable(int deductAmount){
         if(stock - deductAmount < 0){
             throw new NotEnoughStockException();
         }
@@ -27,15 +36,14 @@ public class Product {
         stock -= amount;
     }
 
-    private Product(Long id, String name, int stock, int price) {
-        this.id = id;
+    private Product(String name, int stock, int price) {
         this.name = name;
         this.stock = stock;
         this.price = price;
     }
 
-    public static Product create(Long id, String name, int stock, int price){
-        return new Product(id, name, stock, price);
+    public static Product create(String name, int stock, int price){
+        return new Product(name, stock, price);
     }
 
     @Override
@@ -43,11 +51,11 @@ public class Product {
         if (o == null || getClass() != o.getClass()) return false;
 
         Product product = (Product) o;
-        return stock == product.stock && price == product.price && Objects.equals(id, product.id) && Objects.equals(name, product.name);
+        return Objects.equals(id, product.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, stock, price);
+        return Objects.hashCode(id);
     }
 }

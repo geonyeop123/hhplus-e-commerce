@@ -1,28 +1,44 @@
 package kr.hhplus.be.server.domain.point;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import kr.hhplus.be.server.domain.user.User;
 import kr.hhplus.be.server.support.exception.InsufficientBalanceException;
 import kr.hhplus.be.server.support.exception.MaximumBalanceException;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.util.Objects;
 
 @Getter
+@Entity
 @NoArgsConstructor
 public class Point {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private User user;
+
+    private Long userId;
+
     private int balance;
 
-    public static Point create(Long id, User user, int balance) {
-        return new Point(id, user, balance);
+    public static Point create(User user, int balance) {
+        return new Point(user, balance);
     }
 
-    private Point(Long id, User user, int balance) {
+    @Builder
+    public Point(Long id, User user, int balance) {
         this.id = id;
-        this.user = user;
+        this.userId = user.getId();
+        this.balance = balance;
+    }
+
+    private Point(User user, int balance) {
+        this.userId = user.getId();
         this.balance = balance;
     }
 
@@ -44,7 +60,7 @@ public class Point {
 
         if(amount <= 0){
             throw new IllegalArgumentException("포인트는 1포인트 이상부터 사용 가능합니다.");
-        }else if(usedBalance <= 0){
+        }else if(usedBalance < 0){
             throw new InsufficientBalanceException();
         }
         balance = usedBalance;
@@ -55,11 +71,11 @@ public class Point {
         if (o == null || getClass() != o.getClass()) return false;
 
         Point point = (Point) o;
-        return balance == point.balance && Objects.equals(user, point.user);
+        return Objects.equals(id, point.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(user, balance);
+        return Objects.hashCode(id);
     }
 }

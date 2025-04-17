@@ -104,6 +104,6 @@ class PointTest {
     }
 
     private Point createPoint(int balance){
-        return Point.create(1L, User.create(1L, "yeop"), balance);
+        return Point.create(User.create("yeop"), balance);
     }
 }

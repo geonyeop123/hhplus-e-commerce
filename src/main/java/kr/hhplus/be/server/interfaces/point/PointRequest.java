@@ -2,7 +2,7 @@ package kr.hhplus.be.server.interfaces.point;
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
-import kr.hhplus.be.server.domain.point.ChargeCommand;
+import kr.hhplus.be.server.domain.point.PointCommand;
 
 public record PointRequest(
 ) {
@@ -11,8 +11,8 @@ public record PointRequest(
                 @NotNull
                 Integer amount
         ){
-                ChargeCommand toCommand(Long userId){
-                        return new ChargeCommand(userId, amount);
+                PointCommand.Charge toCommand(Long userId){
+                        return new PointCommand.Charge(userId, amount);
                 }
         }
 }

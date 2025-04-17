@@ -8,6 +8,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 import java.util.Optional;
@@ -32,14 +36,14 @@ class ProductServiceTest {
         void success() {
             // given
             Long productId = 1L;
-            Product req = makeProduct(productId, "사과", 5000, 50);
+            Product req = makeProduct("사과", 5000, 50);
             when(productRepository.find(productId)).thenReturn(Optional.of(req));
 
             // when
             Product product = productService.find(productId);
 
             // then
-            assertThat(product.getId()).isEqualTo(productId);
+            assertThat(product).isEqualTo(req);
             verify(productRepository, times(1)).find(productId);
         }
 
@@ -66,13 +70,14 @@ class ProductServiceTest {
         @Test
         void success() {
             // given
-            ProductCommand command = new ProductCommand(1, 10);
+            ProductCommand.FindAll command = new ProductCommand.FindAll(1, 10);
             List<Product> content = List.of(
-                    makeProduct(1L, "사과", 5000, 50),
-                    makeProduct(2L, "배", 4000, 50)
+                    makeProduct("사과", 5000, 50),
+                    makeProduct("배", 4000, 50)
             );
-            when(productRepository.findProductCount()).thenReturn(2L);
-            when(productRepository.findAll(command)).thenReturn(content);
+            Pageable pageable = PageRequest.of(0, 10);
+            Page<Product> productPage = new PageImpl<>(content, pageable, 2);
+            when(productRepository.findAll(any(Pageable.class))).thenReturn(productPage);
 
             // when
             PageResult<Product> pageResult = productService.findAll(command);
@@ -83,8 +88,29 @@ class ProductServiceTest {
             assertThat(pageResult.size()).isEqualTo(10);
             assertThat(pageResult.totalCount()).isEqualTo(2);
             assertThat(pageResult.totalPages()).isEqualTo(1);
-            verify(productRepository, times(1)).findProductCount();
-            verify(productRepository, times(1)).findAll(command);
+            verify(productRepository, times(1)).findAll(any(Pageable.class));
+        }
+    }
+
+    @Nested
+    class validatePurchase {
+        @DisplayName("구매가 가능한 상품인지 유효성 검사를 할 수 있다.")
+        @Test
+        void success() {
+            // given
+            Long productId = 1L;
+            int stock = 50;
+            int amount = 10;
+            Product findProduct = Product.create("사과", stock, 5000);
+
+            when(productRepository.find(productId)).thenReturn(Optional.of(findProduct));
+
+            // when
+            ProductCommand.ValidatePurchase command = new ProductCommand.ValidatePurchase(productId, amount);
+            productService.validatePurchase(command);
+
+            // then
+            verify(productRepository, times(1)).find(productId);
         }
     }
 
@@ -97,24 +123,22 @@ class ProductServiceTest {
             Long productId = 1L;
             int stock = 50;
             int amount = 10;
-            Product findProduct = Product.create(1L, "사과", stock, 5000);
+            Product findProduct = Product.create("사과", stock, 5000);
 
             when(productRepository.find(productId)).thenReturn(Optional.of(findProduct));
 
             // when
-            Product deductedProduct = productService.deductStock(productId, amount);
+            ProductInfo deductedProduct = productService.deductStock(new ProductCommand.DeductStock(productId, amount));
 
             // then
-            assertThat(deductedProduct.getId()).isEqualTo(productId);
-            assertThat(deductedProduct.getStock()).isEqualTo(stock - amount);
+            assertThat(deductedProduct.stock()).isEqualTo(stock - amount);
             verify(productRepository, times(1)).find(productId);
-            verify(productRepository, times(1)).save(findProduct);
         }
     }
 
 
-    private static Product makeProduct(Long productId, String name, int price, int stock) {
-        return Product.create(productId, name, price, stock);
+    private static Product makeProduct(String name, int price, int stock) {
+        return Product.create(name, price, stock);
     }
 
 }

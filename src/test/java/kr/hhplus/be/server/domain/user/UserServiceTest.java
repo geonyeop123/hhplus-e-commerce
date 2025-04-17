@@ -30,14 +30,14 @@ class UserServiceTest {
         void success() {
             // given
             Long userId = 1L;
-            User user = User.create(userId, "yeop");
-            when(userRepository.findByUserId(userId)).thenReturn(Optional.of(user));
+            User user = User.create("yeop");
+            when(userRepository.findById(userId)).thenReturn(Optional.of(user));
             // when
-            User findUser = userService.findByUserId(userId);
+            User findUser = userService.findById(userId);
 
             // then
             assertThat(findUser).isEqualTo(user);
-            verify(userRepository, times(1)).findByUserId(userId);
+            verify(userRepository, times(1)).findById(userId);
         }
 
         @DisplayName("userId에 해당하는 회원이 없는 경우 IllegalArgumentException이 발생한다.")
@@ -47,7 +47,7 @@ class UserServiceTest {
             Long userId = 1L;
 
             // when // then
-            assertThatThrownBy(() -> userService.findByUserId(userId))
+            assertThatThrownBy(() -> userService.findById(userId))
                     .isInstanceOf(IllegalArgumentException.class)
                     .hasMessage("등록되지 않은 회원입니다.");
         }

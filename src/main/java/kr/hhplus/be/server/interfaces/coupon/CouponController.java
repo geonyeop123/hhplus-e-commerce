@@ -1,7 +1,8 @@
 package kr.hhplus.be.server.interfaces.coupon;
 
+import kr.hhplus.be.server.application.coupon.CouponCriteria;
+import kr.hhplus.be.server.application.coupon.CouponFacade;
 import kr.hhplus.be.server.domain.common.PageResult;
-import kr.hhplus.be.server.domain.coupon.CouponCommand;
 import kr.hhplus.be.server.domain.coupon.CouponService;
 import kr.hhplus.be.server.domain.userCoupon.UserCoupon;
 import kr.hhplus.be.server.domain.userCoupon.UserCouponService;
@@ -17,13 +18,14 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class CouponController implements CouponDocs {
 
+    private final CouponFacade couponFacade;
     private final CouponService couponService;
     private final UserCouponService userCouponService;
 
     @PostMapping("/api/v1/users/{userId}/coupons/{couponId}")
     public ResponseEntity<CouponResponse> issue(@PathVariable Long userId, @PathVariable Long couponId) {
-        CouponCommand couponCommand = new CouponCommand(userId, couponId);
-        return ResponseEntity.ok(CouponResponse.from(couponService.issue(couponCommand)));
+        CouponCriteria.IssueUserCoupon criteria = new CouponCriteria.IssueUserCoupon(userId, couponId);
+        return ResponseEntity.ok(CouponResponse.from(couponFacade.issueUserCoupon(criteria)));
     }
 
     @GetMapping("/api/v1/users/{userId}/coupons")
