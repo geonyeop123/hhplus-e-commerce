@@ -4,6 +4,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import kr.hhplus.be.server.domain.common.BaseEntity;
 import kr.hhplus.be.server.domain.user.User;
 import kr.hhplus.be.server.support.exception.InsufficientBalanceException;
 import kr.hhplus.be.server.support.exception.MaximumBalanceException;
@@ -16,7 +17,7 @@ import java.util.Objects;
 @Getter
 @Entity
 @NoArgsConstructor
-public class Point {
+public class Point extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

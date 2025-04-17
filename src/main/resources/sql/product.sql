@@ -1,0 +1,1 @@
+INSERT INTO product (id, name, price, stock, created_at, modified_at) VALUES (1, 'product1', 1000, 10, '2025-04-17 16:03:30', '2025-04-17 16:03:30');

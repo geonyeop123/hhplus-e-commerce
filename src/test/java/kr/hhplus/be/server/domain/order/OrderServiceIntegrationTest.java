@@ -26,9 +26,6 @@ class OrderServiceIntegrationTest {
     private OrderService orderService;
 
     @Autowired
-    private OrderRepository orderRepository;
-
-    @Autowired
     private JpaOrderRepository jpaOrderRepository;
 
     @Autowired

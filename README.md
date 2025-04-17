@@ -12,7 +12,7 @@
 
 - [API 명세서](https://app.swaggerhub.com/apis-docs/geonyeop123/hhplus-e-commerce/1.0.0#/)
 
-## Software Architecture Pattern
+## 3. Software Architecture Pattern
 
 ### Clean + Layered Architecture
 
@@ -31,3 +31,11 @@ domain
 
 infra
  - RepositoryImpl이 포함됩니다.
+
+## 4. 조회 관련 성능 보고서
+
+ - [인기상품 조회 성능 보고서](docs/search.md)
+
+## 5. 동시성 제어 테스트
+
+ - [동시성 제어 테스트](docs/concurrency.md)

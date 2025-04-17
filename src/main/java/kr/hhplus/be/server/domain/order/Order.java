@@ -14,7 +14,12 @@ import java.util.List;
 import java.util.Objects;
 
 @Getter
-@Table(name = "orders")
+@Table(
+        name = "orders",
+        indexes = {
+
+        }
+)
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Order extends BaseEntity {

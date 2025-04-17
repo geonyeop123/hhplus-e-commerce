@@ -38,6 +38,7 @@ public class ProductService {
         return ProductInfo.from(product);
     }
 
+    @Transactional
     public ProductInfo deductStock(ProductCommand.DeductStock command) {
 
         Product product = find(command.productId());

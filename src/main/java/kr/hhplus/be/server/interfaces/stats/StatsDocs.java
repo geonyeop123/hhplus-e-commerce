@@ -26,30 +26,35 @@ public interface StatsDocs {
                       "products" : [
                             {
                                 "productId": 1,
+                                "totalQuantity": "60",
                                 "name": "맥북",
                                 "stock": 50,
                                 "price": 10000
                             },
                             {
                                 "productId": 2,
+                                "totalQuantity": "50",
                                 "name": "맥북에어",
                                 "stock": 40,
                                 "price": 5000
                             },
                             {
                                 "productId": 3,
+                                "totalQuantity": "40",
                                 "name": "맥북M1",
                                 "stock": 50,
                                 "price": 20000
                             },
                             {
                                 "productId": 4,
+                                "totalQuantity": "20",
                                 "name": "맥북M2",
                                 "stock": 60,
                                 "price": 30000
                             },
                             {
                                 "productId": 5,
+                                "totalQuantity": "10",
                                 "name": "맥북M3",
                                 "stock": 70,
                                 "price": 40000
@@ -60,5 +65,5 @@ public interface StatsDocs {
                     )
             )
     })
-    public ResponseEntity<StatsResponse.PopularSalesCount> popularProduct();
+    public ResponseEntity<StatsResponse.PopularProductResponse> popularProduct();
 }
