@@ -56,7 +56,7 @@ class PointServiceTest {
             int originalAmount = 10;
             Point point = Point.create(user, originalAmount);
             int chargeAmount = 10;
-            when(pointRepository.findByUserId(userId)).thenReturn(Optional.of(point));
+            when(pointRepository.findByUserIdForUpdate(userId)).thenReturn(Optional.of(point));
 
             PointCommand.Charge command = new PointCommand.Charge(user, chargeAmount);
             // when
@@ -64,7 +64,7 @@ class PointServiceTest {
 
             // then
             assertThat(charge.getBalance()).isEqualTo(originalAmount + chargeAmount);
-            verify(pointRepository, times(1)).findByUserId(userId);
+            verify(pointRepository, times(1)).findByUserIdForUpdate(userId);
         }
     }
 

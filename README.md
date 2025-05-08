@@ -42,3 +42,6 @@ infra
 
 ## 6. 동시성 제어 보고서
  - [동시성 제어 보고서](docs/lock.md)
+
+## 7. Redis를 활용한 분산락 적용 보고서
+ - [분산락을 통한 동시성 제어 보고서](docs/distributedLock.md)

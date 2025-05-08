@@ -3,6 +3,7 @@ package kr.hhplus.be.server.domain.point;
 import kr.hhplus.be.server.domain.user.User;
 import kr.hhplus.be.server.infra.point.JpaPointRepository;
 import kr.hhplus.be.server.infra.user.JpaUserRepository;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +31,13 @@ public class PointConcurrencyTest {
     @Autowired
     private JpaPointRepository jpaPointRepository;
 
-    @DisplayName("동시에 여러번 충전을 진행하여도, 충전을 성공한 만큼만 포인트가 추가된다.")
+    @AfterEach
+    void tearDown() {
+        jpaPointRepository.deleteAllInBatch();
+        jpaUserRepository.deleteAllInBatch();
+    }
+
+    @DisplayName("동시에 여러번 충전을 진행하여도, 충전을 요청한 만큼 포인트가 추가된다.")
     @Test
     void chargeConcurrency() throws InterruptedException{
         // given
@@ -59,6 +66,7 @@ public class PointConcurrencyTest {
         latch.await(); // 모든 작업이 끝날 때까지 대기
 
         // then
+        assertThat(successCnt.get()).isNotZero();
         Point finalPoint = pointRepository.findByUserId(user.getId()).orElseThrow();
         assertThat(finalPoint.getBalance()).isEqualTo(chargeAmount * successCnt.get()); // 총합 결과
     }
@@ -69,7 +77,7 @@ public class PointConcurrencyTest {
         // given
         User user = jpaUserRepository.save(User.create("user"));
         jpaPointRepository.save(Point.create(user, 100));
-
+        AtomicInteger successCnt = new AtomicInteger();
         Long userId = user.getId();
 
         int threadCount = 11;
@@ -81,6 +89,7 @@ public class PointConcurrencyTest {
             executorService.submit(() -> {
                 try{
                     pointService.use(new PointCommand.Use(user, 10));
+                    successCnt.getAndIncrement();
                 }catch(Exception e){
                     e.printStackTrace();
                 }finally {
@@ -92,7 +101,9 @@ public class PointConcurrencyTest {
         latch.await(); // 모든 작업이 끝날 때까지 대기
 
         // then
+        assertThat(successCnt.get()).isNotZero();
         Point finalPoint = pointRepository.findByUserId(userId).orElseThrow();
         assertThat(finalPoint.getBalance()).isEqualTo(0); // 총합 결과
     }
+
 }

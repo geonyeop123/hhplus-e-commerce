@@ -8,6 +8,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -29,22 +30,23 @@ class StatsServiceIntegrationTest {
     @Sql(scripts = "/sql/saveSalesProduct.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     void saveSalesProductsByDateTime() {
         // given
-        LocalDateTime dateTime = LocalDateTime.now().minusDays(1);
-        StatsCommand.SaveSalesProducts command = new StatsCommand.SaveSalesProducts(dateTime);
+        LocalDateTime targetDateTime = LocalDateTime.of(2025, 4, 17, 0, 0, 0);
+        StatsCommand.SaveSalesProducts command = new StatsCommand.SaveSalesProducts(targetDateTime);
 
         // when
         statsService.saveSalesProductByDateTime(command);
 
         // then
-        List<SalesProduct> all = jpaStatsRepository.findByOrderDateWithProduct(dateTime.toLocalDate());
+        LocalDate date = targetDateTime.toLocalDate();
+        List<SalesProduct> all = jpaStatsRepository.findByOrderDateWithProduct(date);
         assertThat(all).hasSize(5);
         assertThat(all).extracting("product.id", "salesCount", "orderDate")
                 .containsExactlyInAnyOrder(
-                        tuple(1L, 1L, dateTime.toLocalDate()),
-        tuple(2L, 2L, dateTime.toLocalDate()),
-                tuple(3L, 3L, dateTime.toLocalDate()),
-                tuple(4L, 4L, dateTime.toLocalDate()),
-                tuple(5L, 5L, dateTime.toLocalDate()));
+                        tuple(1L, 1L, date),
+        tuple(2L, 2L, date),
+                tuple(3L, 3L, date),
+                tuple(4L, 4L, date),
+                tuple(5L, 5L, date));
     }
 
     @DisplayName("3일간 가장 판매가 많았던 상품 5개를 조회할 수 있다.")

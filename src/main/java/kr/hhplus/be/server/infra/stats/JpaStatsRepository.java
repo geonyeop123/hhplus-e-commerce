@@ -25,14 +25,14 @@ public interface JpaStatsRepository extends JpaRepository<SalesProduct, Long> {
 
     @Query(value = """
     SELECT
-      op.product_id          AS productId,
-      SUM(op.quantity)       AS salesCount,
-      CURDATE()              AS orderDate
+      op.product_id            AS productId,
+      SUM(op.quantity)         AS salesCount,
+      DATE(o.order_date_time)  AS orderDate
     FROM orders o
     JOIN order_product op ON op.order_id = o.id
     WHERE o.order_date_time >= :dateTime
       AND o.status = 'SUCCESS'
-    GROUP BY op.product_id
+    GROUP BY op.product_id, orderDate
     ORDER BY salesCount DESC
     """, nativeQuery = true)
     List<SalesProductSummary> findSalesProductByDateTime(@Param("dateTime")LocalDateTime dateTime);

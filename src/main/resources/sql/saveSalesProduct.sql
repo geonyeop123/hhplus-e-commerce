@@ -8,11 +8,11 @@ INSERT INTO product (id, name, price, stock, created_at, modified_at) VALUES (2,
 INSERT INTO product (id, name, price, stock, created_at, modified_at) VALUES (3, 'product3', 3000, 30, '2025-04-17 16:03:30', '2025-04-17 16:03:30');
 INSERT INTO product (id, name, price, stock, created_at, modified_at) VALUES (4, 'product4', 4000, 40, '2025-04-17 16:03:30', '2025-04-17 16:03:30');
 INSERT INTO product (id, name, price, stock, created_at, modified_at) VALUES (5, 'product5', 5000, 50, '2025-04-17 16:03:30', '2025-04-17 16:03:30');
-INSERT INTO orders (id, order_amount, final_amount, order_date_time, created_at, modified_at, user_id, status) VALUES (1, 1000, 1000, NOW(), NOW(), NOW(), 1, 'SUCCESS');
-INSERT INTO orders (id, order_amount, final_amount, order_date_time, created_at, modified_at, user_id, status) VALUES (2, 2000, 2000, NOW(), NOW(), NOW(), 2, 'SUCCESS');
-INSERT INTO orders (id, order_amount, final_amount, order_date_time, created_at, modified_at, user_id, status) VALUES (3, 3000, 3000, NOW(), NOW(), NOW(), 3, 'SUCCESS');
-INSERT INTO orders (id, order_amount, final_amount, order_date_time, created_at, modified_at, user_id, status) VALUES (4, 4000, 4000, NOW(), NOW(), NOW(), 4, 'SUCCESS');
-INSERT INTO orders (id, order_amount, final_amount, order_date_time, created_at, modified_at, user_id, status) VALUES (5, 5000, 5000, NOW(), NOW(), NOW(), 5, 'SUCCESS');
+INSERT INTO orders (id, order_amount, final_amount, order_date_time, created_at, modified_at, user_id, status) VALUES (1, 1000, 1000, '2025-04-17 16:03:30', NOW(), NOW(), 1, 'SUCCESS');
+INSERT INTO orders (id, order_amount, final_amount, order_date_time, created_at, modified_at, user_id, status) VALUES (2, 2000, 2000, '2025-04-17 16:03:30', NOW(), NOW(), 2, 'SUCCESS');
+INSERT INTO orders (id, order_amount, final_amount, order_date_time, created_at, modified_at, user_id, status) VALUES (3, 3000, 3000, '2025-04-17 16:03:30', NOW(), NOW(), 3, 'SUCCESS');
+INSERT INTO orders (id, order_amount, final_amount, order_date_time, created_at, modified_at, user_id, status) VALUES (4, 4000, 4000, '2025-04-17 16:03:30', NOW(), NOW(), 4, 'SUCCESS');
+INSERT INTO orders (id, order_amount, final_amount, order_date_time, created_at, modified_at, user_id, status) VALUES (5, 5000, 5000, '2025-04-17 16:03:30', NOW(), NOW(), 5, 'SUCCESS');
 INSERT INTO order_product (id, price, quantity, order_id, product_id, name) VALUES (1, 1000, 1, 1, 1, 'product1');
 INSERT INTO order_product (id, price, quantity, order_id, product_id, name) VALUES (2, 2000, 2, 2, 2, 'product2');
 INSERT INTO order_product (id, price, quantity, order_id, product_id, name) VALUES (3, 3000, 3, 3, 3, 'product3');

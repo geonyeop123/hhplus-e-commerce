@@ -24,9 +24,6 @@ public class Point extends BaseEntity {
 
     private int balance;
 
-    @Version
-    private Long version;
-
     public static Point create(User user, int balance) {
         return new Point(user, balance);
     }

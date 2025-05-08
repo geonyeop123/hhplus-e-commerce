@@ -4,6 +4,7 @@ import kr.hhplus.be.server.domain.product.ProductCommand;
 import kr.hhplus.be.server.domain.user.User;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public record OrderCriteria(
 
@@ -13,6 +14,13 @@ public record OrderCriteria(
             Long userCouponId,
             List<OrderItem> orderItems
     ) {
+
+        public List<Long> toLockKeys() {
+            return orderItems.stream()
+                    .map(OrderItem::productId)
+                    .sorted()
+                    .collect(Collectors.toList());
+        }
 
         public void toProductCommand() {
 

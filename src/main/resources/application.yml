@@ -38,3 +38,8 @@ spring:
         format_sql: true
         highlight_sql: true
         use_sql_comments: true
+
+data:
+  redis:
+    host: redis
+    port: 6379
