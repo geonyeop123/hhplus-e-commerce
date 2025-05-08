@@ -45,3 +45,6 @@ infra
 
 ## 7. Redis를 활용한 분산락 적용 보고서
  - [분산락을 통한 동시성 제어 보고서](docs/distributedLock.md)
+
+## 8. Redis를 활용한 캐시 보고서
+ - [Redis를 활용한 캐시 보고서](docs/cache.md)

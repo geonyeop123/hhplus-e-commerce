@@ -9,6 +9,7 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -39,8 +40,8 @@ public class StatsRepositoryImpl implements StatsRepository {
     }
 
     @Override
-    public List<PopularProduct> getPopularProducts() {
-        List<NativePopularProduct> NativePopularProducts = jpaStatsRepository.getPopularProducts();
+    public List<PopularProduct> getPopularProducts(LocalDate startDate, LocalDate endDate) {
+        List<NativePopularProduct> NativePopularProducts = jpaStatsRepository.getPopularProducts(startDate, endDate);
         return NativePopularProducts.stream().map(NativePopularProduct -> {
             return new PopularProduct(NativePopularProduct.getProductId(), NativePopularProduct.getTotalQuantity(), NativePopularProduct.getName(), NativePopularProduct.getPrice(), NativePopularProduct.getStock());
         }).toList();

@@ -14,11 +14,11 @@ public class StatsScheduler {
 
     private final StatsService salesService;
 
-    @Scheduled(cron = "0 0 * * * *")
+    @Scheduled(cron = "0 0 0 * * *")
     public void hourlySalesProducts() {
         LocalDateTime now = LocalDateTime.now();
-        LocalDateTime today = LocalDateTime.of(now.getYear(), now.getMonth(), now.getDayOfMonth(),
-                now.getHour() - 1, 0, 0);
+        LocalDateTime today = LocalDateTime.of(now.getYear(), now.getMonth(), now.getDayOfMonth() - 1,
+                0, 0, 0);
         StatsCommand.SaveSalesProducts command = new StatsCommand.SaveSalesProducts(today);
         salesService.saveSalesProductByDateTime(command);
     }

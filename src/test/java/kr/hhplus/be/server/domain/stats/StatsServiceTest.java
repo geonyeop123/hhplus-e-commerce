@@ -60,15 +60,15 @@ class StatsServiceTest {
                 new PopularProduct(3L, 45L, "맥북", 5000, 50),
                 new PopularProduct(4L, 45L, "맥북", 5000, 50),
                 new PopularProduct(5L, 45L, "맥북", 5000, 50));
-
-        when(statsRepository.getPopularProducts()).thenReturn(res);
+        StatsCommand.PopularProducts command = new StatsCommand.PopularProducts(LocalDate.now().minusDays(3), LocalDate.now().minusDays(1));
+        when(statsRepository.getPopularProducts(command.startDate(), command.endDate())).thenReturn(res);
 
         // when
-        List<PopularProduct> popularProducts = statsService.getPopularProducts();
+        PopularProducts popularProducts = statsService.getPopularProducts(command);
 
         // then
         assertThat(popularProducts).isNotNull();
-        verify(statsRepository, times(1)).getPopularProducts();
+        verify(statsRepository, times(1)).getPopularProducts(command.startDate(), command.endDate());
     }
 
 }

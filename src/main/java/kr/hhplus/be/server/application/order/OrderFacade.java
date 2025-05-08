@@ -10,7 +10,6 @@ import kr.hhplus.be.server.domain.payment.PaymentService;
 import kr.hhplus.be.server.domain.product.ProductInfo;
 import kr.hhplus.be.server.domain.product.ProductService;
 import kr.hhplus.be.server.domain.user.User;
-import kr.hhplus.be.server.domain.user.UserService;
 import kr.hhplus.be.server.domain.userCoupon.UserCouponCommand;
 import kr.hhplus.be.server.domain.userCoupon.UserCouponInfo;
 import kr.hhplus.be.server.domain.userCoupon.UserCouponService;
@@ -25,8 +24,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class OrderFacade {
 
-    //TODO 제거
-    private final UserService userService;
     private final ProductService productService;
     private final UserCouponService userCouponService;
     private final OrderService orderService;

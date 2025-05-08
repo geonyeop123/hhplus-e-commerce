@@ -2,7 +2,6 @@ package kr.hhplus.be.server.application.coupon;
 
 import kr.hhplus.be.server.domain.coupon.Coupon;
 import kr.hhplus.be.server.domain.coupon.CouponService;
-import kr.hhplus.be.server.domain.user.UserService;
 import kr.hhplus.be.server.domain.userCoupon.UserCoupon;
 import kr.hhplus.be.server.domain.userCoupon.UserCouponService;
 import kr.hhplus.be.server.support.config.redis.DistributedLock;
@@ -14,9 +13,6 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 public class CouponFacade {
-
-    //TODO 제거
-    private final UserService userService;
 
     private final CouponService couponService;
     private final UserCouponService userCouponService;

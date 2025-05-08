@@ -1,6 +1,8 @@
 package kr.hhplus.be.server.interfaces.stats;
 
 import kr.hhplus.be.server.domain.stats.PopularProduct;
+import kr.hhplus.be.server.domain.stats.PopularProducts;
+import kr.hhplus.be.server.domain.stats.StatsCommand;
 import kr.hhplus.be.server.domain.stats.StatsService;
 import kr.hhplus.be.server.domain.user.UserService;
 import org.junit.jupiter.api.DisplayName;
@@ -11,6 +13,7 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import static org.mockito.Mockito.when;
@@ -41,11 +44,14 @@ class StatsControllerTest {
                 new PopularProduct(4L, 1000L, "상품4", 1000, 10),
                 new PopularProduct(5L, 1000L, "상품5", 1000, 10)
         );
-        when(statsService.getPopularProducts()).thenReturn(products);
+        StatsCommand.PopularProducts command = new StatsCommand.PopularProducts(LocalDate.now().minusDays(3), LocalDate.now());
+        when(statsService.getPopularProducts(command)).thenReturn(new PopularProducts(products));
 
 
         // when // then
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/stats/products/popular"))
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/stats/products/popular")
+                        .queryParam("startDate", command.startDate().toString())
+                        .queryParam("endDate", command.endDate().toString()))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.products").isArray())

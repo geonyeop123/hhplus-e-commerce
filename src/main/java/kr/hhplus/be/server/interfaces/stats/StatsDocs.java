@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import kr.hhplus.be.server.interfaces.product.ProductResponse;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ModelAttribute;
 
 @Tag(name = "stats", description = "stats API")
 public interface StatsDocs {
@@ -65,5 +66,5 @@ public interface StatsDocs {
                     )
             )
     })
-    public ResponseEntity<StatsResponse.PopularProductResponse> popularProduct();
+    public ResponseEntity<StatsResponse.PopularProductResponse> popularProduct(@ModelAttribute StatsRequest request);
 }

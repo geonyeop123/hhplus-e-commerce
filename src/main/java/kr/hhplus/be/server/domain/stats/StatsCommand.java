@@ -1,8 +1,17 @@
 package kr.hhplus.be.server.domain.stats;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public record StatsCommand() {
+
+    public record PopularProducts(
+            LocalDate startDate,
+            LocalDate endDate
+    ) {
+
+    }
+
     public record SaveSalesProducts (
             LocalDateTime dateTime
     ) {

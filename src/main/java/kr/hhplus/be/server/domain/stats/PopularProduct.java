@@ -7,4 +7,5 @@ public record PopularProduct(
         int price,
         int stock
 ) {
+
 }

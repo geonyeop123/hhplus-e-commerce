@@ -5,12 +5,14 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.redis.cache.RedisCacheManager;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.tuple;
@@ -24,6 +26,9 @@ class StatsServiceIntegrationTest {
 
     @Autowired
     private JpaStatsRepository jpaStatsRepository;
+
+    @Autowired
+    private RedisCacheManager redisCacheManager;
 
     @DisplayName("datetime을 기준으로 판매된 상품의 집계 데이터를 저장할 수 있다.")
     @Test
@@ -54,20 +59,24 @@ class StatsServiceIntegrationTest {
     @Sql(scripts = "/sql/popularProduct.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     void popularProducts() {
         // given // when
-        List<PopularProduct> popularProducts = statsService.getPopularProducts();
+        Objects.requireNonNull(redisCacheManager.getCache("popularProducts")).clear();
+        StatsCommand.PopularProducts command = new StatsCommand.PopularProducts(LocalDate.now().minusDays(3), LocalDate.now().minusDays(1));
+        PopularProducts popularProducts = statsService.getPopularProducts(command);
 
         // then
-        assertThat(popularProducts).hasSize(5);
+        assertThat(popularProducts.getProducts()).hasSize(5);
     }
 
     @DisplayName("3일간 가장 판매가 많았던 상품이 조회되지 않는 경우 빈 배열이 반환된다.")
     @Test
     void emptyPopularProducts() {
         // given // when
-        List<PopularProduct> popularProducts = statsService.getPopularProducts();
+        Objects.requireNonNull(redisCacheManager.getCache("popularProducts")).clear();
+        StatsCommand.PopularProducts command = new StatsCommand.PopularProducts(LocalDate.now().minusDays(3), LocalDate.now().minusDays(1));
+        PopularProducts popularProducts = statsService.getPopularProducts(command);
 
         // then
-        assertThat(popularProducts).isEmpty();
+        assertThat(popularProducts.getProducts()).isEmpty();
     }
 
 }

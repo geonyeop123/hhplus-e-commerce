@@ -2,6 +2,7 @@ package kr.hhplus.be.server.domain.stats;
 
 import kr.hhplus.be.server.infra.stats.SalesProductSummary;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,8 +15,12 @@ public class StatsService {
     private final StatsRepository statsRepository;
 
     @Transactional(readOnly = true)
-    public List<PopularProduct> getPopularProducts() {
-        return statsRepository.getPopularProducts();
+    @Cacheable(
+            cacheNames = "popularProducts",
+            key        = "#command.startDate().toString() + '_' + #command.endDate().toString()"
+    )
+    public PopularProducts getPopularProducts(StatsCommand.PopularProducts command) {
+        return new PopularProducts(statsRepository.getPopularProducts(command.startDate(), command.endDate()));
     }
 
     @Transactional
