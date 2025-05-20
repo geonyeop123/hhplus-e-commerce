@@ -25,6 +25,7 @@ public class CouponController implements CouponDocs {
     private final UserCouponService userCouponService;
 
     @PostMapping("/api/v1/coupons/{couponId}")
+    @Deprecated(since = "2025-05-20", forRemoval = true)
     public ResponseEntity<CouponResponse> issue(@CurrentUser User user, @PathVariable Long couponId) {
         CouponCriteria.IssueUserCoupon criteria = new CouponCriteria.IssueUserCoupon(user, couponId);
         return ResponseEntity.ok(CouponResponse.from(couponFacade.issueUserCoupon(criteria)));
