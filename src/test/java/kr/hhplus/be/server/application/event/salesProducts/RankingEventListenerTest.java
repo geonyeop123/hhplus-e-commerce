@@ -1,5 +1,7 @@
 package kr.hhplus.be.server.application.event.salesProducts;
 
+import kr.hhplus.be.server.domain.order.OrderCompletedEvent;
+import kr.hhplus.be.server.application.event.ranking.RankingEventListener;
 import kr.hhplus.be.server.application.ranking.RankingCriteria;
 import kr.hhplus.be.server.application.ranking.RankingFacade;
 import kr.hhplus.be.server.domain.order.Order;
