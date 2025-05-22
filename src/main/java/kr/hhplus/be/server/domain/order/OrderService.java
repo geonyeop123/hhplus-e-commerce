@@ -1,6 +1,7 @@
 package kr.hhplus.be.server.domain.order;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Service;
 public class OrderService {
 
     private final OrderRepository orderRepository;
+    private final ApplicationEventPublisher publisher;
 
     public Order order(OrderCommand.Create command) {
         Order order = Order.create(command.user());
@@ -18,6 +20,8 @@ public class OrderService {
 
         order.applyCoupon(command.userCouponInfo());
         order.complete();
+
+        publisher.publishEvent(new OrderCompletedEvent(OrderInfo.from(order)));
 
         return orderRepository.save(order);
     }
