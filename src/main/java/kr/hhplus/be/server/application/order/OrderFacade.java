@@ -1,10 +1,8 @@
 package kr.hhplus.be.server.application.order;
 
 
-import kr.hhplus.be.server.application.event.salesProducts.OrderCompletedEvent;
 import kr.hhplus.be.server.domain.order.Order;
 import kr.hhplus.be.server.domain.order.OrderCommand;
-import kr.hhplus.be.server.domain.order.OrderInfo;
 import kr.hhplus.be.server.domain.order.OrderService;
 import kr.hhplus.be.server.domain.payment.Payment;
 import kr.hhplus.be.server.domain.payment.PaymentCommand;
@@ -17,7 +15,6 @@ import kr.hhplus.be.server.domain.userCoupon.UserCouponInfo;
 import kr.hhplus.be.server.domain.userCoupon.UserCouponService;
 import kr.hhplus.be.server.support.config.redis.DistributedLock;
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,7 +28,6 @@ public class OrderFacade {
     private final UserCouponService userCouponService;
     private final OrderService orderService;
     private final PaymentService paymentService;
-    private final ApplicationEventPublisher publisher;
 
 
     @Transactional
@@ -59,8 +55,6 @@ public class OrderFacade {
 
         UserCouponCommand.Use command = new UserCouponCommand.Use(user.getId(), criteria.userCouponId());
         userCouponService.use(command);
-
-        publisher.publishEvent(new OrderCompletedEvent(OrderInfo.from(order)));
 
         return new OrderResult(
                 order.getId(), payment.getId(),
