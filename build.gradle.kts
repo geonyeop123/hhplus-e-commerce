@@ -38,6 +38,7 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-aop")
 	implementation("org.springframework.retry:spring-retry")
 	implementation("org.redisson:redisson-spring-boot-starter:3.46.0")
+	implementation("org.springframework.kafka:spring-kafka")
 
 	// lombok
 	compileOnly("org.projectlombok:lombok")
@@ -54,6 +55,7 @@ dependencies {
 
     // Test
     testImplementation("org.springframework.boot:spring-boot-starter-test")
+	testImplementation("org.springframework.kafka:spring-kafka-test")
 	testImplementation("org.springframework.boot:spring-boot-testcontainers")
 	testImplementation("org.testcontainers:junit-jupiter")
 	testImplementation("org.testcontainers:mysql")
