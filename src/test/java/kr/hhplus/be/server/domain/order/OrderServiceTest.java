@@ -10,6 +10,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.context.ApplicationEventPublisher;
 
 import java.util.List;
 
@@ -22,10 +23,13 @@ class OrderServiceTest {
     @Mock
     private OrderRepository orderRepository;
 
+    @Mock
+    private ApplicationEventPublisher publisher;
+
     @InjectMocks
     private OrderService orderService;
 
-    @DisplayName("주문을 요청하면 생성 후 저장한다.")
+    @DisplayName("주문을 요청하면 주문을 생성하고 주문 완료 이벤트가 발행된다.")
     @Test
     void order() {
         // given
@@ -43,6 +47,7 @@ class OrderServiceTest {
 
         // then
         verify(orderRepository, times(1)).save(any(Order.class));
+        verify(publisher, times(1)).publishEvent(any(OrderCompletedEvent.class));
     }
 
 }
