@@ -15,7 +15,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -48,22 +47,17 @@ public class UserCouponService {
     }
 
     public UserCoupon issue(UserCouponCommand.Issue command){
+        Long userId = command.user().getId();
+        Long couponId = command.coupon().getId();
+        Coupon coupon = command.coupon();
 
-        Optional<UserCoupon> byUserIdAndCouponId = userCouponRepository.findByUserIdAndCouponId(command.user().getId(), command.coupon().getId());
-
-        UserCoupon userCoupon;
-
-        if(byUserIdAndCouponId.isPresent()){
-            userCoupon = byUserIdAndCouponId.get();
-            log.error("이미 발급받은 쿠폰입니다.");
-            userCouponRepository.issueChecked(command.user().getId(), command.coupon().getId());
-        }else{
-            Coupon coupon = command.coupon();
-            userCoupon = coupon.issueTo(command.user());
-            userCouponRepository.save(userCoupon);
-        }
-
-        return userCoupon;
+        return userCouponRepository
+            .findByUserIdAndCouponId(userId, couponId)
+            .map(existing -> {
+                log.warn("이미 보유한 쿠폰입니다. couponId : {}, userCouponId: {}", couponId, existing.getId());
+                return existing;
+            })
+            .orElseGet(() -> userCouponRepository.save(coupon.issueTo(command.user())));
     }
 
     public UserCouponInfo validateAndGetInfo(UserCouponCommand.Validate command) {

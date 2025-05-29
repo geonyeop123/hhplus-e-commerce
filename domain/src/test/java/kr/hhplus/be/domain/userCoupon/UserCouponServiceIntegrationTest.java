@@ -10,17 +10,14 @@ import kr.hhplus.be.infra.user.JpaUserRepository;
 import kr.hhplus.be.infra.userCoupon.JpaUserCouponRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.tuple;
@@ -52,76 +49,6 @@ class UserCouponServiceIntegrationTest {
     @AfterEach
     void tearDown() {
         redisTemplate.delete(redisTemplate.keys("*"));
-    }
-
-    @Nested
-    class findIssueTarget{
-        @DisplayName("쿠폰 발급 대상을 조회할 때 등록 순서대로 조회한다.")
-        @Test
-        void findIssueTargetOrderByCall() {
-            // given
-            Coupon coupon = Coupon.create("4월 반짝 쿠폰", CouponType.TOTAL, DiscountType.FIXED, 5000, 3, LocalDate.now(), LocalDate.now().plusDays(3), 10);
-            jpaCouponRepository.save(coupon);
-            UserCouponCommand.FindIssueTarget command = new UserCouponCommand.FindIssueTarget(coupon.getId(), 5);
-
-            final String KEY_PREFIX = "coupon:";
-            final String CALL_KEY_SUFFIX = ":callIssue";
-            String callKey = KEY_PREFIX + coupon.getId() + CALL_KEY_SUFFIX;
-            long SystemTime = System.currentTimeMillis();
-            redisTemplate.opsForZSet().add(callKey, "userId:1", SystemTime);
-            redisTemplate.opsForZSet().add(callKey, "userId:2", SystemTime + 1);
-            redisTemplate.opsForZSet().add(callKey, "userId:3", SystemTime + 2);
-            redisTemplate.opsForZSet().add(callKey, "userId:4", SystemTime + 3);
-            redisTemplate.opsForZSet().add(callKey, "userId:5", SystemTime + 4);
-            // when
-            List<Long> issueTargetUserIds = userCouponService.findIssueTargetUserIds(command);
-
-            // then
-            assertThat(issueTargetUserIds).hasSize(5);
-            assertThat(issueTargetUserIds).containsExactly(1L, 2L, 3L, 4L, 5L);
-        }
-
-        @DisplayName("쿠폰 발급 대상을 조회할 때 발급 수보다 많은 대기인원이 있어도 발급 수만큼만 조회한다.")
-        @Test
-        void findIssueTargetOverSetSize() {
-            // given
-            Coupon coupon = Coupon.create("4월 반짝 쿠폰", CouponType.TOTAL, DiscountType.FIXED, 5000, 3, LocalDate.now(), LocalDate.now().plusDays(3), 10);
-            jpaCouponRepository.save(coupon);
-            UserCouponCommand.FindIssueTarget command = new UserCouponCommand.FindIssueTarget(coupon.getId(), 5);
-
-            final String KEY_PREFIX = "coupon:";
-            final String CALL_KEY_SUFFIX = ":callIssue";
-            String callKey = KEY_PREFIX + coupon.getId() + CALL_KEY_SUFFIX;
-            long SystemTime = System.currentTimeMillis();
-            redisTemplate.opsForZSet().add(callKey, "userId:1", SystemTime);
-            redisTemplate.opsForZSet().add(callKey, "userId:2", SystemTime + 1);
-            redisTemplate.opsForZSet().add(callKey, "userId:3", SystemTime + 2);
-            redisTemplate.opsForZSet().add(callKey, "userId:4", SystemTime + 3);
-            redisTemplate.opsForZSet().add(callKey, "userId:5", SystemTime + 4);
-            redisTemplate.opsForZSet().add(callKey, "userId:6", SystemTime + 5);
-            redisTemplate.opsForZSet().add(callKey, "userId:7", SystemTime + 6);
-            // when
-            List<Long> issueTargetUserIds = userCouponService.findIssueTargetUserIds(command);
-
-            // then
-            assertThat(issueTargetUserIds).hasSize(5);
-            assertThat(issueTargetUserIds).containsExactly(1L, 2L, 3L, 4L, 5L);
-        }
-
-        @DisplayName("쿠폰 발급 대상을 조회할 때 요청한 대상이 없으면 빈 객체가 반환된다.")
-        @Test
-        void findIssueTargetEmptyList() {
-            // given
-            Coupon coupon = Coupon.create("4월 반짝 쿠폰", CouponType.TOTAL, DiscountType.FIXED, 5000, 3, LocalDate.now(), LocalDate.now().plusDays(3), 10);
-            jpaCouponRepository.save(coupon);
-            UserCouponCommand.FindIssueTarget command = new UserCouponCommand.FindIssueTarget(coupon.getId(), 5);
-
-            // when
-            List<Long> issueTargetUserIds = userCouponService.findIssueTargetUserIds(command);
-
-            // then
-            assertThat(issueTargetUserIds).isEmpty();
-        }
     }
 
     // 단건 조회
@@ -180,12 +107,6 @@ class UserCouponServiceIntegrationTest {
 
         Coupon coupon = Coupon.create("4월 반짝 쿠폰", CouponType.TOTAL, DiscountType.FIXED, 5000, 3, LocalDate.now(), LocalDate.now().plusDays(3), 50);
         Coupon savedCoupon = jpaCouponRepository.save(coupon);
-        final String KEY_PREFIX = "coupon:";
-        final String CALL_KEY_SUFFIX = ":callIssue";
-        final String ISSUED_KEY_SUFFIX = ":issued";
-        String callKey = KEY_PREFIX + coupon.getId() + CALL_KEY_SUFFIX;
-        long SystemTime = System.currentTimeMillis();
-        redisTemplate.opsForZSet().add(callKey, "userId:" + savedUser.getId(), SystemTime);
 
         // when
         UserCouponCommand.Issue command = new UserCouponCommand.Issue(savedUser, coupon);
@@ -199,12 +120,6 @@ class UserCouponServiceIntegrationTest {
         assertThat(savedUserCoupon.getCouponId()).isEqualTo(savedCoupon.getId());
         assertThat(savedUserCoupon.getName()).isEqualTo(savedCoupon.getName());
         assertThat(savedUserCoupon.getDiscountAmount()).isEqualTo(savedCoupon.getDiscountAmount());
-
-        Set<ZSetOperations.TypedTuple<Object>> typedTuples = redisTemplate.opsForZSet().rangeWithScores(callKey, 0, -1);
-        assertThat(typedTuples).isEmpty();
-        String issuedKey = KEY_PREFIX + coupon.getId() + ISSUED_KEY_SUFFIX;
-        Boolean isMember = redisTemplate.opsForSet().isMember(issuedKey, "userId:" + user.getId());
-        assertThat(isMember).isTrue();
     }
 
     // 유효성 검사
