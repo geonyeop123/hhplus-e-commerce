@@ -1,13 +1,16 @@
 package kr.hhplus.be;
 
 import jakarta.annotation.PreDestroy;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
+import org.springframework.context.annotation.Configuration;
 import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.containers.MySQLContainer;
 import org.testcontainers.utility.DockerImageName;
 
-//@Configuration
-//@SpringBootApplication
-//@EntityScan(basePackages = "kr.hhplus.be.domain")
+@Configuration
+@SpringBootApplication
+@EntityScan(basePackages = "kr.hhplus.be.domain")
 class TestcontainersConfiguration {
 
 	public static MySQLContainer<?> MYSQL_CONTAINER;

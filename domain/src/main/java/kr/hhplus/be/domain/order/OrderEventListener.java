@@ -15,7 +15,7 @@ public class OrderEventListener {
 
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     @Async
-    public void handleOrderCompleted(OrderCompletedEvent event) {
+    public void handleOrderCompleted(OrderEvent.Completed event) {
         globalEventPublisher.publish("outside.order.completed.v1", event.orderInfo());
     }
 

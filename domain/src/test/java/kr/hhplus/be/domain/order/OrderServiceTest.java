@@ -47,7 +47,7 @@ class OrderServiceTest {
 
         // then
         verify(orderRepository, times(1)).save(any(Order.class));
-        verify(publisher, times(1)).publishEvent(any(OrderCompletedEvent.class));
+        verify(publisher, times(1)).publishEvent(any(OrderEvent.Completed.class));
     }
 
 }

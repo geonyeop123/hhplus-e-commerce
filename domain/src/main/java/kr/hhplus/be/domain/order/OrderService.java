@@ -21,7 +21,7 @@ public class OrderService {
         order.applyCoupon(command.userCouponInfo());
         order.complete();
 
-        publisher.publishEvent(new OrderCompletedEvent(OrderInfo.from(order)));
+        publisher.publishEvent(new OrderEvent.Completed(OrderInfo.from(order)));
 
         return orderRepository.save(order);
     }

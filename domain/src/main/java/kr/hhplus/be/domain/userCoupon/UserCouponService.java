@@ -1,6 +1,7 @@
 package kr.hhplus.be.domain.userCoupon;
 
 
+import kr.hhplus.be.domain.common.GlobalEventPublisher;
 import kr.hhplus.be.domain.common.PageResult;
 import kr.hhplus.be.domain.coupon.Coupon;
 import kr.hhplus.be.domain.user.User;
@@ -25,6 +26,7 @@ public class UserCouponService {
 
     private final UserService userService;
     private final UserCouponRepository userCouponRepository;
+    private final GlobalEventPublisher globalEventPublisher;
 
 
     public void callIssueUserCoupon(UserCouponCommand.CallIssue command) {

@@ -1,6 +1,6 @@
 package kr.hhplus.be.server.application.event.ranking;
 
-import kr.hhplus.be.domain.order.OrderCompletedEvent;
+import kr.hhplus.be.domain.order.OrderEvent;
 import kr.hhplus.be.server.application.ranking.RankingCriteria;
 import kr.hhplus.be.server.application.ranking.RankingFacade;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +17,7 @@ public class RankingEventListener {
 
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     @Async
-    public void handleOrderCompleted(OrderCompletedEvent event) {
+    public void handleOrderCompleted(OrderEvent.Completed event) {
         RankingCriteria criteria = new RankingCriteria(event.orderInfo());
         rankingFacade.saveSalesProduct(criteria);
     }

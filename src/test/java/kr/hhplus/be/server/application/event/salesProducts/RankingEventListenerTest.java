@@ -1,9 +1,6 @@
 package kr.hhplus.be.server.application.event.salesProducts;
 
-import kr.hhplus.be.domain.order.Order;
-import kr.hhplus.be.domain.order.OrderCompletedEvent;
-import kr.hhplus.be.domain.order.OrderInfo;
-import kr.hhplus.be.domain.order.OrderProduct;
+import kr.hhplus.be.domain.order.*;
 import kr.hhplus.be.domain.product.Product;
 import kr.hhplus.be.domain.product.ProductInfo;
 import kr.hhplus.be.domain.user.User;
@@ -41,7 +38,7 @@ class RankingEventListenerTest {
         RankingCriteria criteria = new RankingCriteria(orderInfo);
         doNothing().when(rankingFacade).saveSalesProduct(criteria);
 
-        OrderCompletedEvent event = new OrderCompletedEvent(orderInfo);
+        OrderEvent.Completed event = new OrderEvent.Completed(orderInfo);
         // when
         listener.handleOrderCompleted(event);
 
