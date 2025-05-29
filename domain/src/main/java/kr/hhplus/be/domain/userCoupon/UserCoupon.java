@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 import kr.hhplus.be.domain.common.BaseEntity;
 import kr.hhplus.be.domain.coupon.CouponType;
 import kr.hhplus.be.domain.coupon.DiscountType;
+import kr.hhplus.be.support.exception.AlreadyUsedException;
+import kr.hhplus.be.support.exception.ExpiredException;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -73,9 +75,9 @@ public class UserCoupon extends BaseEntity {
         if(!this.userId.equals(userId)){
             throw new IllegalArgumentException("보유 중인 쿠폰이 아닙니다.");
         }else if(isExpiration()){
-            throw new ExpiredException("유효기간이 만료된 쿠폰입니다.");
+            throw new ExpiredException(this.id);
         }else if(isUsed()){
-            throw new AlreadyUsedException("이미 사용된 쿠폰입니다.");
+            throw new AlreadyUsedException(this.id);
         }
     }
 
