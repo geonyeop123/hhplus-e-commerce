@@ -1,5 +1,6 @@
 package kr.hhplus.be.server.support.exception;
 
+import kr.hhplus.be.support.exception.BusinessException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -10,8 +11,8 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(BusinessException.class)
     public ResponseEntity<ErrorResponse> handleBusinessException(BusinessException e) {
-        ErrorResponse response = new ErrorResponse(String.valueOf(e.getStatus().value()), e.getMessage());
-        return ResponseEntity.status(e.getStatus().value()).body(response);
+        ErrorResponse response = new ErrorResponse(String.valueOf(400), e.getMessage());
+        return ResponseEntity.status(400).body(response);
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
