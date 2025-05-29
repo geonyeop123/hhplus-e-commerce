@@ -1,11 +1,13 @@
 package kr.hhplus.be.domain.coupon;
 
+import kr.hhplus.be.domain.user.User;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.context.ApplicationEventPublisher;
 
 import java.time.LocalDate;
 import java.util.Optional;
@@ -18,6 +20,9 @@ class CouponServiceTest {
 
     @Mock
     private CouponRepository couponRepository;
+
+    @Mock
+    private ApplicationEventPublisher publisher;
 
     @InjectMocks
     private CouponService couponService;
@@ -67,6 +72,18 @@ class CouponServiceTest {
 
         // then
         verify(couponRepository, times(1)).save(any(Coupon.class));
+    }
+
+    @DisplayName("쿠폰 발급 요청을 할 수 있다.")
+    @Test
+    void issueCall() {
+        // given
+        User user = User.create("yeop");
+        Long couponId = 1L;
+        CouponCommand.IssueCall command = new CouponCommand.IssueCall(user, couponId);
+        when(couponRepository.issueCall(user.getId(), couponId)).thenReturn(true);
+        // when // then
+        couponService.issueCall(command);
     }
 
 }

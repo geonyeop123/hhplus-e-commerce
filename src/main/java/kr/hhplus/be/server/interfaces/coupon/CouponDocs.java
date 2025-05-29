@@ -118,4 +118,36 @@ public interface CouponDocs {
             @CurrentUser User user
             , CouponRequest.Coupons request
     );
+
+    @Operation(summary = "선착순 쿠폰 발급 요청", description = "선착순 쿠폰 발급을 요청합니다." +
+            "<br> 발급 요청한 이력이 있는 경우 요청에 실패합니다.")
+    @ApiResponses(value ={
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "쿠폰 발급 요청 성공",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = CouponResponse.class),
+                            examples = @ExampleObject(value = """
+                    {
+                            }
+                    """)
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "잘못된 쿠폰 요청, 잘못된 사용자 요청",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponse.class),
+                            examples = @ExampleObject(value = """
+                    {
+                      "code": 400,
+                      "message": "이미 발급 요청한 쿠폰입니다."
+                    }
+                    """)
+                    )
+            )
+    })
+    public ResponseEntity<Void> callIssue(@CurrentUser User user, @PathVariable Long couponId);
 }

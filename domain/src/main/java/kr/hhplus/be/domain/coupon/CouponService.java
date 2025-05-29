@@ -1,10 +1,13 @@
 package kr.hhplus.be.domain.coupon;
 
+import kr.hhplus.be.support.exception.AlreadyIssuedException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -12,6 +15,7 @@ import java.util.List;
 public class CouponService {
 
     private final CouponRepository couponRepository;
+    private final ApplicationEventPublisher applicationEventPublisher;
 
     @Transactional
     public Coupon register(CouponCommand.Register command){
@@ -22,6 +26,17 @@ public class CouponService {
                 , command.issueEndDate(), command.initialQuantity());
 
         return couponRepository.save(coupon);
+    }
+
+    public void issueCall(CouponCommand.IssueCall command) {
+        Long userId = command.user().getId();
+        Long couponId = command.couponId();
+        boolean isFail = !couponRepository.issueCall(couponId, userId);
+        if(isFail){
+            throw new AlreadyIssuedException("이미 발급 요청한 쿠폰입니다.", userId, couponId);
+        }
+
+        applicationEventPublisher.publishEvent(new CouponEvent.IssueCalled(couponId, userId, LocalDateTime.now()));
     }
 
     @Transactional(readOnly = true)

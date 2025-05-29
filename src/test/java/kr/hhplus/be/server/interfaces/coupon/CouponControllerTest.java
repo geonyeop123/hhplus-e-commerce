@@ -1,6 +1,7 @@
 package kr.hhplus.be.server.interfaces.coupon;
 
 import kr.hhplus.be.domain.common.PageResult;
+import kr.hhplus.be.domain.coupon.CouponCommand;
 import kr.hhplus.be.domain.coupon.CouponService;
 import kr.hhplus.be.domain.user.User;
 import kr.hhplus.be.domain.user.UserService;
@@ -22,6 +23,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import java.time.LocalDate;
 import java.util.List;
 
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -105,6 +107,23 @@ class CouponControllerTest {
                 .andExpect(jsonPath("$.size").value(command.pageSize()))
                 .andExpect(jsonPath("$.totalCount").value(result.totalCount()))
                 .andExpect(jsonPath("$.totalPages").value(result.totalPages()))
+        ;
+    }
+
+    @DisplayName("사용자와 쿠폰의 id를 통해 쿠폰을 발급 요청할 수 있다.")
+    @Test
+    void post_api_v1_users_userId_coupons_call_couponId_200() throws Exception{
+        // given
+        Long userId = 1L;
+        Long couponId = 1L;
+        CouponCommand.IssueCall command = new CouponCommand.IssueCall(user, couponId);
+        doNothing().when(couponService).issueCall(command);
+
+        // when // then
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/coupons/call/{couponId}", couponId)
+                        .header("X-USER-ID", userId))
+                .andDo(print())
+                .andExpect(status().isOk())
         ;
     }
 

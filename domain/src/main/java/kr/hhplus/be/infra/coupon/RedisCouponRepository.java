@@ -9,4 +9,9 @@ import org.springframework.stereotype.Component;
 public class RedisCouponRepository {
 
     private final RedisTemplate<String, Object> redisTemplate;
+
+    public boolean addSet(String key, String value) {
+        Long addCount = redisTemplate.opsForSet().add(key, value);
+        return addCount != null && addCount == 1L;
+    }
 }

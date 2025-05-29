@@ -1,6 +1,7 @@
 package kr.hhplus.be.server.interfaces.coupon;
 
 import kr.hhplus.be.domain.common.PageResult;
+import kr.hhplus.be.domain.coupon.CouponCommand;
 import kr.hhplus.be.domain.coupon.CouponService;
 import kr.hhplus.be.domain.user.User;
 import kr.hhplus.be.domain.userCoupon.UserCoupon;
@@ -45,5 +46,12 @@ public class CouponController implements CouponDocs {
                 , result.page(), result.size(), result.totalCount(), result.totalPages());
 
         return ResponseEntity.ok().body(response);
+    }
+
+    @PostMapping("/api/v1/coupons/call/{couponId}")
+    public ResponseEntity<Void> callIssue(@CurrentUser User user, @PathVariable Long couponId) {
+        CouponCommand.IssueCall command = new CouponCommand.IssueCall(user, couponId);
+        couponService.issueCall(command);
+        return ResponseEntity.ok().build();
     }
 }

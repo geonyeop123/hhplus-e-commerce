@@ -8,4 +8,6 @@ public interface CouponRepository {
     Optional<Coupon> findById(Long id);
     Optional<Coupon> findByIdForUpdate(Long id);
     List<Coupon> findByIssueStatusIsIng();
+
+    boolean issueCall(Long couponId, Long userId);
 }
