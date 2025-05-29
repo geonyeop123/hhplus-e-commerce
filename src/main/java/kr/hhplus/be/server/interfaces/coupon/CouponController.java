@@ -6,8 +6,6 @@ import kr.hhplus.be.domain.coupon.CouponService;
 import kr.hhplus.be.domain.user.User;
 import kr.hhplus.be.domain.userCoupon.UserCoupon;
 import kr.hhplus.be.domain.userCoupon.UserCouponService;
-import kr.hhplus.be.server.application.coupon.CouponCriteria;
-import kr.hhplus.be.server.application.coupon.CouponFacade;
 import kr.hhplus.be.server.interfaces.common.CurrentUser;
 import kr.hhplus.be.server.interfaces.common.PageResponse;
 import lombok.RequiredArgsConstructor;
@@ -21,17 +19,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class CouponController implements CouponDocs {
 
-    private final CouponFacade couponFacade;
     private final CouponService couponService;
     private final UserCouponService userCouponService;
-
-    @PostMapping("/api/v1/coupons/{couponId}")
-    @Deprecated(since = "2025-05-20", forRemoval = true)
-    public ResponseEntity<CouponResponse> issue(@CurrentUser User user, @PathVariable Long couponId) {
-        CouponCriteria.IssueUserCoupon criteria = new CouponCriteria.IssueUserCoupon(user, couponId);
-//        return ResponseEntity.ok(CouponResponse.from(couponFacade.issueUserCoupon(criteria)));
-        return null;
-    }
 
     @GetMapping("/api/v1/coupons")
     public ResponseEntity<PageResponse<CouponResponse>> coupons(

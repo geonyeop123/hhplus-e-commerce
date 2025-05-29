@@ -8,7 +8,6 @@ import kr.hhplus.be.domain.user.UserService;
 import kr.hhplus.be.domain.userCoupon.UserCoupon;
 import kr.hhplus.be.domain.userCoupon.UserCouponCommand;
 import kr.hhplus.be.domain.userCoupon.UserCouponService;
-import kr.hhplus.be.server.application.coupon.CouponFacade;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -37,9 +36,6 @@ class CouponControllerTest {
     private MockMvc mockMvc;
 
     @MockitoBean
-    private CouponFacade couponFacade;
-
-    @MockitoBean
     private CouponService couponService;
 
     @MockitoBean
@@ -54,28 +50,6 @@ class CouponControllerTest {
     void setUp() {
         user = User.create("yeop");
         when(userService.findById(1L)).thenReturn(user);
-    }
-
-    @DisplayName("사용자와 쿠폰의 id를 통해 쿠폰을 발급받을 수 있다.")
-    @Test
-    void post_api_v1_users_userId_coupons_couponId_200() throws Exception{
-        // given
-//        Long userId = 1L;
-//        Long couponId = 1L;
-//        CouponCriteria.IssueUserCoupon criteria = new CouponCriteria.IssueUserCoupon(user, couponId);
-//        CouponResult.IssueUserCoupon result  =new CouponResult.IssueUserCoupon(1L, "4월 반짝 쿠폰", 5000, LocalDate.of(2025, 4, 20));
-//        when(couponFacade.issueUserCoupon(criteria)).thenReturn(result);
-//
-//        // when // then
-//        mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/coupons/{couponId}", couponId)
-//                        .header("X-USER-ID", userId))
-//                .andDo(print())
-//                .andExpect(status().isOk())
-//                .andExpect(jsonPath("$.userCouponId").value(result.id()))
-//                .andExpect(jsonPath("$.name").value(result.name()))
-//                .andExpect(jsonPath("$.discountAmount").value(result.discountAmount()))
-//                .andExpect(jsonPath("$.expirationAt").value("2025-04-20"))
-//        ;
     }
 
     @DisplayName("userId에 해당하는 사용자의 쿠폰 목록을 조회할 수 있다.")
