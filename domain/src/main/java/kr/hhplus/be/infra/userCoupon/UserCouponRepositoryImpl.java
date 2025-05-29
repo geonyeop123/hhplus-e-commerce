@@ -29,11 +29,6 @@ public class UserCouponRepositoryImpl implements UserCouponRepository {
     }
 
     @Override
-    public boolean callIssue(Long userId, Long couponId) {
-        return redisUserCouponRepository.callIssue(userId, couponId);
-    }
-
-    @Override
     public Page<UserCoupon> findAllByUserId(Long userId, Pageable pageable) {
         return jpaUserCouponRepository.findAllByUserId(userId, pageable);
     }

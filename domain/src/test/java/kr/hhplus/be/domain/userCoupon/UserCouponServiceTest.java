@@ -6,7 +6,6 @@ import kr.hhplus.be.domain.coupon.CouponType;
 import kr.hhplus.be.domain.coupon.DiscountType;
 import kr.hhplus.be.domain.user.User;
 import kr.hhplus.be.domain.user.UserService;
-import kr.hhplus.be.support.exception.AlreadyIssuedException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -35,43 +34,6 @@ class UserCouponServiceTest {
 
     @InjectMocks
     private UserCouponService userCouponService;
-
-    @Nested
-    class callIssue {
-        @DisplayName("쿠폰 발급 요청할 수 있다.")
-        @Test
-        void successCallIssue() {
-            // given
-            User user = User.create("yeop");
-            Long couponId = 1L;
-            UserCouponCommand.CallIssue command = new UserCouponCommand.CallIssue(user, couponId);
-            when(userCouponRepository.callIssue(user.getId(), couponId)).thenReturn(true);
-            // when
-
-            userCouponService.callIssueUserCoupon(command);
-
-            // then
-            verify(userCouponRepository, times(1)).callIssue(user.getId(), couponId);
-        }
-
-        @DisplayName("쿠폰 발급 요청에 실패하는 경우 AlreadyIssuedException이 발생한다.")
-        @Test
-        void failCallIssue() {
-            // given
-            User user = User.create("yeop");
-            Long couponId = 1L;
-            UserCouponCommand.CallIssue command = new UserCouponCommand.CallIssue(user, couponId);
-            when(userCouponRepository.callIssue(user.getId(), couponId)).thenReturn(false);
-            // when
-
-            assertThatThrownBy(() -> userCouponService.callIssueUserCoupon(command))
-                    .isInstanceOf(AlreadyIssuedException.class)
-                            .hasMessage("이미 발급 요청한 쿠폰입니다.");
-
-            // then
-            verify(userCouponRepository, times(1)).callIssue(user.getId(), couponId);
-        }
-    }
 
     @DisplayName("userId로 해당 유저가 보유한 쿠폰을 모두 조회할 수 있다.")
     @Test

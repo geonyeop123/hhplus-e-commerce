@@ -1,12 +1,10 @@
 package kr.hhplus.be.domain.userCoupon;
 
 
-import kr.hhplus.be.domain.common.GlobalEventPublisher;
 import kr.hhplus.be.domain.common.PageResult;
 import kr.hhplus.be.domain.coupon.Coupon;
 import kr.hhplus.be.domain.user.User;
 import kr.hhplus.be.domain.user.UserService;
-import kr.hhplus.be.support.exception.AlreadyIssuedException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -26,15 +24,6 @@ public class UserCouponService {
 
     private final UserService userService;
     private final UserCouponRepository userCouponRepository;
-    private final GlobalEventPublisher globalEventPublisher;
-
-
-    public void callIssueUserCoupon(UserCouponCommand.CallIssue command) {
-        boolean isFail = !userCouponRepository.callIssue(command.user().getId(), command.couponId());
-        if(isFail){
-           throw new AlreadyIssuedException("이미 발급 요청한 쿠폰입니다.", command.user().getId(), command.couponId());
-        }
-    }
 
     public List<Long> findIssueTargetUserIds(UserCouponCommand.FindIssueTarget command) {
         return userCouponRepository.findIssueTarget(command.couponId(), command.quantity());

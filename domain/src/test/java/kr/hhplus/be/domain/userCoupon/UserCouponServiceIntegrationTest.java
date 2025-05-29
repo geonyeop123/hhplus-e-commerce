@@ -8,7 +8,6 @@ import kr.hhplus.be.domain.user.User;
 import kr.hhplus.be.infra.coupon.JpaCouponRepository;
 import kr.hhplus.be.infra.user.JpaUserRepository;
 import kr.hhplus.be.infra.userCoupon.JpaUserCouponRepository;
-import kr.hhplus.be.support.exception.AlreadyIssuedException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -23,7 +22,8 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.tuple;
 
 @SpringBootTest(properties = {
         "spring.jpa.hibernate.ddl-auto=create"
@@ -52,61 +52,6 @@ class UserCouponServiceIntegrationTest {
     @AfterEach
     void tearDown() {
         redisTemplate.delete(redisTemplate.keys("*"));
-    }
-
-    @Nested
-    class callIssue{
-        @DisplayName("쿠폰 발급을 요청하면 redis에 저장된다.")
-        @Test
-        void callIssueUserCoupon() {
-            // given
-            User user = jpaUserRepository.save(User.create("yeop"));
-            UserCouponCommand.CallIssue command = new UserCouponCommand.CallIssue(user, 1L);
-            // when
-            userCouponService.callIssueUserCoupon(command);
-
-            // then
-            String key = "coupon:"+ command.couponId() +":callIssue";
-            assertThat(redisTemplate.hasKey(key)).isTrue();
-            Set<ZSetOperations.TypedTuple<Object>> typedTuples = redisTemplate.opsForZSet().reverseRangeWithScores(key, 0, -1);
-            assertThat(typedTuples).extracting("value")
-                    .containsExactlyInAnyOrder("userId:" + user.getId());
-
-        }
-
-        @DisplayName("이미 발급 요청된 유저가 다시 요청하는 경우 AlreadyIssuedException이 발생한다.")
-        @Test
-        void callIssue_alreadyIssuedCall() {
-            // given
-            User user = jpaUserRepository.save(User.create("yeop"));
-            Long couponId = 1L;
-            UserCouponCommand.CallIssue command = new UserCouponCommand.CallIssue(user, couponId);
-
-            final String KEY_PREFIX = "coupon:";
-            final String CALL_KEY_SUFFIX = ":callIssue";
-            redisTemplate.opsForZSet().add(KEY_PREFIX + couponId + CALL_KEY_SUFFIX, "userId:" + user.getId(), 1);
-            // when
-            assertThatThrownBy(() -> userCouponService.callIssueUserCoupon(command))
-                    .isInstanceOf(AlreadyIssuedException.class)
-                    .hasMessage("이미 발급 요청한 쿠폰입니다.");
-        }
-
-        @DisplayName("이미 발급 받은 유저가 다시 요청하는 경우 AlreadyIssuedException이 발생한다.")
-        @Test
-        void callIssue_alreadyIssued() {
-            // given
-            User user = jpaUserRepository.save(User.create("yeop"));
-            Long couponId = 1L;
-            UserCouponCommand.CallIssue command = new UserCouponCommand.CallIssue(user, couponId);
-
-            final String KEY_PREFIX = "coupon:";
-            final String ISSUED_KEY_SUFFIX = ":issued";
-            redisTemplate.opsForSet().add(KEY_PREFIX + couponId + ISSUED_KEY_SUFFIX, "userId:" + user.getId());
-            // when
-            assertThatThrownBy(() -> userCouponService.callIssueUserCoupon(command))
-                    .isInstanceOf(AlreadyIssuedException.class)
-                    .hasMessage("이미 발급 요청한 쿠폰입니다.");
-        }
     }
 
     @Nested
