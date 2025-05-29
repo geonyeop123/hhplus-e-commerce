@@ -3,6 +3,7 @@ package kr.hhplus.be.domain.coupon;
 import kr.hhplus.be.domain.user.User;
 import kr.hhplus.be.domain.userCoupon.UserCoupon;
 import kr.hhplus.be.support.exception.CouponIssueLimitExceededException;
+import kr.hhplus.be.support.exception.CouponIssuePeriodException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -39,8 +40,9 @@ class CouponTest {
             LocalDate now = LocalDate.now();
 
             // when // then
-            boolean isValid = coupon.isValid(now);
-            assertThat(isValid).isFalse();
+            assertThatThrownBy(() -> coupon.isValid(now)).isInstanceOf(CouponIssueLimitExceededException.class)
+                    .hasMessage("발급 가능한 수량을 초과하였습니다.");
+
         }
 
         @DisplayName("현재 날짜가 쿠폰의 발급 기간이 아닌 경우 유효성 검사에 실패하며 false를 반환한다.")
@@ -52,8 +54,9 @@ class CouponTest {
             LocalDate now = LocalDate.now();
 
             // when // then
-            boolean isValid = coupon.isValid(now);
-            assertThat(isValid).isFalse();
+            assertThatThrownBy(() -> coupon.isValid(now)).isInstanceOf(CouponIssuePeriodException.class)
+                    .hasMessage("쿠폰 발급 기간이 아닙니다.");
+
         }
     }
 

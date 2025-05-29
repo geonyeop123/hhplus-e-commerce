@@ -50,11 +50,7 @@ public class CouponService {
         Coupon coupon = couponRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 쿠폰입니다."));
 
-        boolean notValid = !coupon.isValid(LocalDate.now());
-
-        if(notValid){
-            coupon.finishIssue();
-        }
+        coupon.isValid(LocalDate.now());
 
         return coupon;
     }
