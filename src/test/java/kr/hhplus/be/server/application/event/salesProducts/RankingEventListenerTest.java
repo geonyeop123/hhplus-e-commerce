@@ -1,15 +1,15 @@
 package kr.hhplus.be.server.application.event.salesProducts;
 
-import kr.hhplus.be.server.domain.order.OrderCompletedEvent;
+import kr.hhplus.be.domain.order.Order;
+import kr.hhplus.be.domain.order.OrderCompletedEvent;
+import kr.hhplus.be.domain.order.OrderInfo;
+import kr.hhplus.be.domain.order.OrderProduct;
+import kr.hhplus.be.domain.product.Product;
+import kr.hhplus.be.domain.product.ProductInfo;
+import kr.hhplus.be.domain.user.User;
 import kr.hhplus.be.server.application.event.ranking.RankingEventListener;
 import kr.hhplus.be.server.application.ranking.RankingCriteria;
 import kr.hhplus.be.server.application.ranking.RankingFacade;
-import kr.hhplus.be.server.domain.order.Order;
-import kr.hhplus.be.server.domain.order.OrderInfo;
-import kr.hhplus.be.server.domain.order.OrderProduct;
-import kr.hhplus.be.server.domain.product.Product;
-import kr.hhplus.be.server.domain.product.ProductInfo;
-import kr.hhplus.be.server.domain.user.User;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

@@ -40,6 +40,9 @@ dependencies {
 	implementation("org.redisson:redisson-spring-boot-starter:3.46.0")
 	implementation("org.springframework.kafka:spring-kafka")
 
+	// Domin
+	implementation(project(":domain"))
+
 	// lombok
 	compileOnly("org.projectlombok:lombok")
 	annotationProcessor("org.projectlombok:lombok")

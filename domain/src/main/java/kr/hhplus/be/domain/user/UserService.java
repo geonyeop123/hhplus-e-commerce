@@ -13,4 +13,5 @@ public class UserService {
         return userRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("등록되지 않은 회원입니다."));
     }
+
 }

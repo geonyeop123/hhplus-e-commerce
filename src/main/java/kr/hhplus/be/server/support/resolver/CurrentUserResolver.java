@@ -1,6 +1,6 @@
 package kr.hhplus.be.server.support.resolver;
 
-import kr.hhplus.be.server.domain.user.User;
+import kr.hhplus.be.domain.user.User;
 import kr.hhplus.be.server.interfaces.common.CurrentUser;
 import org.springframework.core.MethodParameter;
 import org.springframework.web.bind.support.WebDataBinderFactory;

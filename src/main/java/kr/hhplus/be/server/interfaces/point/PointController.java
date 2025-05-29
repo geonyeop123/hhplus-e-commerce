@@ -2,13 +2,16 @@ package kr.hhplus.be.server.interfaces.point;
 
 
 import jakarta.validation.Valid;
-import kr.hhplus.be.server.domain.point.PointCommand;
-import kr.hhplus.be.server.domain.point.PointService;
-import kr.hhplus.be.server.domain.user.User;
+import kr.hhplus.be.domain.point.PointCommand;
+import kr.hhplus.be.domain.point.PointService;
+import kr.hhplus.be.domain.user.User;
 import kr.hhplus.be.server.interfaces.common.CurrentUser;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor

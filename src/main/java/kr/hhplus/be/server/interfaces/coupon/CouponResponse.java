@@ -1,7 +1,7 @@
 package kr.hhplus.be.server.interfaces.coupon;
 
+import kr.hhplus.be.domain.userCoupon.UserCoupon;
 import kr.hhplus.be.server.application.coupon.CouponResult;
-import kr.hhplus.be.server.domain.userCoupon.UserCoupon;
 
 import java.time.LocalDate;
 

@@ -1,7 +1,7 @@
 package kr.hhplus.be.server.application.order;
 
-import kr.hhplus.be.server.domain.product.ProductCommand;
-import kr.hhplus.be.server.domain.user.User;
+import kr.hhplus.be.domain.product.ProductCommand;
+import kr.hhplus.be.domain.user.User;
 
 import java.util.List;
 import java.util.stream.Collectors;

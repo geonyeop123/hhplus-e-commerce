@@ -1,15 +1,15 @@
 package kr.hhplus.be.server.application.order;
 
-import kr.hhplus.be.server.domain.point.Point;
-import kr.hhplus.be.server.domain.product.Product;
-import kr.hhplus.be.server.domain.product.ProductRepository;
-import kr.hhplus.be.server.domain.user.User;
-import kr.hhplus.be.server.infra.order.JpaOrderProductRepository;
-import kr.hhplus.be.server.infra.order.JpaOrderRepository;
-import kr.hhplus.be.server.infra.payment.JpaPaymentRepository;
-import kr.hhplus.be.server.infra.point.JpaPointRepository;
-import kr.hhplus.be.server.infra.product.JpaProductRepository;
-import kr.hhplus.be.server.infra.user.JpaUserRepository;
+import kr.hhplus.be.domain.point.Point;
+import kr.hhplus.be.domain.product.Product;
+import kr.hhplus.be.domain.product.ProductRepository;
+import kr.hhplus.be.domain.user.User;
+import kr.hhplus.be.infra.order.JpaOrderProductRepository;
+import kr.hhplus.be.infra.order.JpaOrderRepository;
+import kr.hhplus.be.infra.payment.JpaPaymentRepository;
+import kr.hhplus.be.infra.point.JpaPointRepository;
+import kr.hhplus.be.infra.product.JpaProductRepository;
+import kr.hhplus.be.infra.user.JpaUserRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

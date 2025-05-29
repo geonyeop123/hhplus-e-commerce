@@ -1,6 +1,7 @@
 package kr.hhplus.be.server.interfaces.point;
 
-import kr.hhplus.be.server.domain.point.Point;
+
+import kr.hhplus.be.domain.point.Point;
 
 public record PointResponse (
         Long userId,

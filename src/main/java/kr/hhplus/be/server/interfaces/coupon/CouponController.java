@@ -1,12 +1,12 @@
 package kr.hhplus.be.server.interfaces.coupon;
 
+import kr.hhplus.be.domain.common.PageResult;
+import kr.hhplus.be.domain.coupon.CouponService;
+import kr.hhplus.be.domain.user.User;
+import kr.hhplus.be.domain.userCoupon.UserCoupon;
+import kr.hhplus.be.domain.userCoupon.UserCouponService;
 import kr.hhplus.be.server.application.coupon.CouponCriteria;
 import kr.hhplus.be.server.application.coupon.CouponFacade;
-import kr.hhplus.be.server.domain.common.PageResult;
-import kr.hhplus.be.server.domain.coupon.CouponService;
-import kr.hhplus.be.server.domain.user.User;
-import kr.hhplus.be.server.domain.userCoupon.UserCoupon;
-import kr.hhplus.be.server.domain.userCoupon.UserCouponService;
 import kr.hhplus.be.server.interfaces.common.CurrentUser;
 import kr.hhplus.be.server.interfaces.common.PageResponse;
 import lombok.RequiredArgsConstructor;

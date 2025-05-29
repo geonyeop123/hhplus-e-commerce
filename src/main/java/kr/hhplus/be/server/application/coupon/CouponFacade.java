@@ -1,13 +1,14 @@
 package kr.hhplus.be.server.application.coupon;
 
-import kr.hhplus.be.server.domain.coupon.Coupon;
-import kr.hhplus.be.server.domain.coupon.CouponService;
-import kr.hhplus.be.server.domain.coupon.IssueStatus;
-import kr.hhplus.be.server.domain.user.User;
-import kr.hhplus.be.server.domain.user.UserService;
-import kr.hhplus.be.server.domain.userCoupon.UserCoupon;
-import kr.hhplus.be.server.domain.userCoupon.UserCouponCommand;
-import kr.hhplus.be.server.domain.userCoupon.UserCouponService;
+
+import kr.hhplus.be.domain.coupon.Coupon;
+import kr.hhplus.be.domain.coupon.CouponService;
+import kr.hhplus.be.domain.coupon.IssueStatus;
+import kr.hhplus.be.domain.user.User;
+import kr.hhplus.be.domain.user.UserService;
+import kr.hhplus.be.domain.userCoupon.UserCoupon;
+import kr.hhplus.be.domain.userCoupon.UserCouponCommand;
+import kr.hhplus.be.domain.userCoupon.UserCouponService;
 import kr.hhplus.be.server.support.config.redis.DistributedLock;
 import kr.hhplus.be.server.support.config.redis.LockType;
 import lombok.RequiredArgsConstructor;

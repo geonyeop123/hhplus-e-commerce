@@ -1,6 +1,7 @@
 package kr.hhplus.be.server.interfaces.ranking;
 
-import kr.hhplus.be.server.domain.ranking.SalesProduct;
+
+import kr.hhplus.be.domain.ranking.SalesProduct;
 
 public record RankingResponse(
         Long productId,

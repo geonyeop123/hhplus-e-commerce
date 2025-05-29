@@ -1,11 +1,11 @@
 package kr.hhplus.be.server.interfaces.point;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import kr.hhplus.be.server.domain.point.Point;
-import kr.hhplus.be.server.domain.point.PointCommand;
-import kr.hhplus.be.server.domain.point.PointService;
-import kr.hhplus.be.server.domain.user.User;
-import kr.hhplus.be.server.domain.user.UserService;
+import kr.hhplus.be.domain.point.Point;
+import kr.hhplus.be.domain.point.PointCommand;
+import kr.hhplus.be.domain.point.PointService;
+import kr.hhplus.be.domain.user.User;
+import kr.hhplus.be.domain.user.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;

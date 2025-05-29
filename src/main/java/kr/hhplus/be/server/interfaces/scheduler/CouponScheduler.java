@@ -1,10 +1,10 @@
 package kr.hhplus.be.server.interfaces.scheduler;
 
 
+import kr.hhplus.be.domain.coupon.Coupon;
+import kr.hhplus.be.domain.coupon.CouponService;
 import kr.hhplus.be.server.application.coupon.CouponCriteria;
 import kr.hhplus.be.server.application.coupon.CouponFacade;
-import kr.hhplus.be.server.domain.coupon.Coupon;
-import kr.hhplus.be.server.domain.coupon.CouponService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;

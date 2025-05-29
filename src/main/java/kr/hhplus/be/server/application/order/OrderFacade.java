@@ -1,18 +1,18 @@
 package kr.hhplus.be.server.application.order;
 
 
-import kr.hhplus.be.server.domain.order.Order;
-import kr.hhplus.be.server.domain.order.OrderCommand;
-import kr.hhplus.be.server.domain.order.OrderService;
-import kr.hhplus.be.server.domain.payment.Payment;
-import kr.hhplus.be.server.domain.payment.PaymentCommand;
-import kr.hhplus.be.server.domain.payment.PaymentService;
-import kr.hhplus.be.server.domain.product.ProductInfo;
-import kr.hhplus.be.server.domain.product.ProductService;
-import kr.hhplus.be.server.domain.user.User;
-import kr.hhplus.be.server.domain.userCoupon.UserCouponCommand;
-import kr.hhplus.be.server.domain.userCoupon.UserCouponInfo;
-import kr.hhplus.be.server.domain.userCoupon.UserCouponService;
+import kr.hhplus.be.domain.order.Order;
+import kr.hhplus.be.domain.order.OrderCommand;
+import kr.hhplus.be.domain.order.OrderService;
+import kr.hhplus.be.domain.payment.Payment;
+import kr.hhplus.be.domain.payment.PaymentCommand;
+import kr.hhplus.be.domain.payment.PaymentService;
+import kr.hhplus.be.domain.product.ProductInfo;
+import kr.hhplus.be.domain.product.ProductService;
+import kr.hhplus.be.domain.user.User;
+import kr.hhplus.be.domain.userCoupon.UserCouponCommand;
+import kr.hhplus.be.domain.userCoupon.UserCouponInfo;
+import kr.hhplus.be.domain.userCoupon.UserCouponService;
 import kr.hhplus.be.server.support.config.redis.DistributedLock;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

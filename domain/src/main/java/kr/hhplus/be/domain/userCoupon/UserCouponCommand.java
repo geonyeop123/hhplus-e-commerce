@@ -1,6 +1,5 @@
 package kr.hhplus.be.domain.userCoupon;
 
-
 import kr.hhplus.be.domain.coupon.Coupon;
 import kr.hhplus.be.domain.user.User;
 

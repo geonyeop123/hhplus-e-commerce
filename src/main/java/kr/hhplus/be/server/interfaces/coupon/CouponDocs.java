@@ -7,7 +7,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import kr.hhplus.be.server.domain.user.User;
+import kr.hhplus.be.domain.user.User;
 import kr.hhplus.be.server.interfaces.common.CurrentUser;
 import kr.hhplus.be.server.interfaces.common.PageResponse;
 import kr.hhplus.be.server.interfaces.product.ProductResponse;

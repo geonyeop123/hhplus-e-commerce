@@ -1,11 +1,11 @@
 package kr.hhplus.be.server.application.stats;
 
+import kr.hhplus.be.domain.ranking.Ranking;
+import kr.hhplus.be.domain.ranking.SalesProduct;
+import kr.hhplus.be.domain.stats.DailySalesProduct;
+import kr.hhplus.be.domain.stats.StatsCommand;
+import kr.hhplus.be.domain.stats.StatsService;
 import kr.hhplus.be.server.application.ranking.RankingFacade;
-import kr.hhplus.be.server.domain.ranking.Ranking;
-import kr.hhplus.be.server.domain.ranking.SalesProduct;
-import kr.hhplus.be.server.domain.stats.DailySalesProduct;
-import kr.hhplus.be.server.domain.stats.StatsCommand;
-import kr.hhplus.be.server.domain.stats.StatsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

@@ -2,8 +2,8 @@ package kr.hhplus.be.server.interfaces.point;
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
-import kr.hhplus.be.server.domain.point.PointCommand;
-import kr.hhplus.be.server.domain.user.User;
+import kr.hhplus.be.domain.point.PointCommand;
+import kr.hhplus.be.domain.user.User;
 
 public record PointRequest(
 ) {

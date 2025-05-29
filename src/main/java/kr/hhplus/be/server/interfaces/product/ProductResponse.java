@@ -1,6 +1,6 @@
 package kr.hhplus.be.server.interfaces.product;
 
-import kr.hhplus.be.server.domain.product.ProductInfo;
+import kr.hhplus.be.domain.product.ProductInfo;
 
 public record ProductResponse(
         Long productId,

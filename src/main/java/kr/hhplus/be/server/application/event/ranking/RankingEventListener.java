@@ -1,8 +1,8 @@
 package kr.hhplus.be.server.application.event.ranking;
 
+import kr.hhplus.be.domain.order.OrderCompletedEvent;
 import kr.hhplus.be.server.application.ranking.RankingCriteria;
 import kr.hhplus.be.server.application.ranking.RankingFacade;
-import kr.hhplus.be.server.domain.order.OrderCompletedEvent;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;

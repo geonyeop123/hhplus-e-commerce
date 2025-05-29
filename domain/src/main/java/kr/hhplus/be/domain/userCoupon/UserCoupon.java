@@ -1,6 +1,5 @@
 package kr.hhplus.be.domain.userCoupon;
 
-
 import jakarta.persistence.*;
 import kr.hhplus.be.domain.common.BaseEntity;
 import kr.hhplus.be.domain.coupon.CouponType;

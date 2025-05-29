@@ -33,9 +33,18 @@ dependencies {
     // Spring
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 
+    // Redis
+    implementation("org.redisson:redisson-spring-boot-starter:3.46.0")
+
+    // Kafka
+    implementation("org.springframework.kafka:spring-kafka")
+
     // lombok
     compileOnly("org.projectlombok:lombok")
     annotationProcessor("org.projectlombok:lombok")
+
+    // json
+    implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.13.1")
 
     // DB
     runtimeOnly("com.mysql:mysql-connector-j")
@@ -43,6 +52,7 @@ dependencies {
     // Test
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.springframework.boot:spring-boot-testcontainers")
+    testImplementation("org.springframework.kafka:spring-kafka-test")
     testImplementation("org.testcontainers:junit-jupiter")
     testImplementation("org.testcontainers:mysql")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")

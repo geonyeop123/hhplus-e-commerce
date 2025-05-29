@@ -1,9 +1,9 @@
 package kr.hhplus.be.server.interfaces.product;
 
-import kr.hhplus.be.server.domain.common.PageResult;
-import kr.hhplus.be.server.domain.product.ProductCommand;
-import kr.hhplus.be.server.domain.product.ProductInfo;
-import kr.hhplus.be.server.domain.product.ProductService;
+import kr.hhplus.be.domain.common.PageResult;
+import kr.hhplus.be.domain.product.ProductCommand;
+import kr.hhplus.be.domain.product.ProductInfo;
+import kr.hhplus.be.domain.product.ProductService;
 import kr.hhplus.be.server.interfaces.common.PageResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

@@ -1,12 +1,12 @@
 package kr.hhplus.be.server.interfaces.product;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import kr.hhplus.be.server.domain.common.PageResult;
-import kr.hhplus.be.server.domain.product.Product;
-import kr.hhplus.be.server.domain.product.ProductCommand;
-import kr.hhplus.be.server.domain.product.ProductInfo;
-import kr.hhplus.be.server.domain.product.ProductService;
-import kr.hhplus.be.server.domain.user.UserService;
+import kr.hhplus.be.domain.common.PageResult;
+import kr.hhplus.be.domain.product.Product;
+import kr.hhplus.be.domain.product.ProductCommand;
+import kr.hhplus.be.domain.product.ProductInfo;
+import kr.hhplus.be.domain.product.ProductService;
+import kr.hhplus.be.domain.user.UserService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

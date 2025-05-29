@@ -1,13 +1,14 @@
 package kr.hhplus.be.server.application.coupon;
 
-import kr.hhplus.be.server.domain.coupon.Coupon;
-import kr.hhplus.be.server.domain.coupon.CouponType;
-import kr.hhplus.be.server.domain.coupon.DiscountType;
-import kr.hhplus.be.server.domain.user.User;
-import kr.hhplus.be.server.domain.userCoupon.UserCouponCommand;
-import kr.hhplus.be.server.domain.userCoupon.UserCouponService;
-import kr.hhplus.be.server.infra.coupon.JpaCouponRepository;
-import kr.hhplus.be.server.infra.user.JpaUserRepository;
+
+import kr.hhplus.be.domain.coupon.Coupon;
+import kr.hhplus.be.domain.coupon.CouponType;
+import kr.hhplus.be.domain.coupon.DiscountType;
+import kr.hhplus.be.domain.user.User;
+import kr.hhplus.be.domain.userCoupon.UserCouponCommand;
+import kr.hhplus.be.domain.userCoupon.UserCouponService;
+import kr.hhplus.be.infra.coupon.JpaCouponRepository;
+import kr.hhplus.be.infra.user.JpaUserRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

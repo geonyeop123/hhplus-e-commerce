@@ -1,7 +1,7 @@
 package kr.hhplus.be.server.interfaces.ranking;
 
+import kr.hhplus.be.domain.ranking.Ranking;
 import kr.hhplus.be.server.application.ranking.RankingFacade;
-import kr.hhplus.be.server.domain.ranking.Ranking;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;

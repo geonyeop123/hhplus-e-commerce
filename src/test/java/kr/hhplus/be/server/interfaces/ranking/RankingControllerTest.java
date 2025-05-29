@@ -1,10 +1,10 @@
 package kr.hhplus.be.server.interfaces.ranking;
 
+import kr.hhplus.be.domain.ranking.Ranking;
+import kr.hhplus.be.domain.ranking.RankingType;
+import kr.hhplus.be.domain.ranking.SalesProduct;
+import kr.hhplus.be.domain.user.UserService;
 import kr.hhplus.be.server.application.ranking.RankingFacade;
-import kr.hhplus.be.server.domain.ranking.Ranking;
-import kr.hhplus.be.server.domain.ranking.RankingType;
-import kr.hhplus.be.server.domain.ranking.SalesProduct;
-import kr.hhplus.be.server.domain.user.UserService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

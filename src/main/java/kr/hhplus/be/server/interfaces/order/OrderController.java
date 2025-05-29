@@ -1,7 +1,7 @@
 package kr.hhplus.be.server.interfaces.order;
 
 import jakarta.validation.Valid;
-import kr.hhplus.be.server.domain.user.User;
+import kr.hhplus.be.domain.user.User;
 import kr.hhplus.be.server.application.order.OrderCriteria;
 import kr.hhplus.be.server.application.order.OrderFacade;
 import kr.hhplus.be.server.application.order.OrderResult;

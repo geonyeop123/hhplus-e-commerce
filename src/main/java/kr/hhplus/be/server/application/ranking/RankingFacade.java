@@ -1,8 +1,8 @@
 package kr.hhplus.be.server.application.ranking;
 
-import kr.hhplus.be.server.domain.product.ProductInfo;
-import kr.hhplus.be.server.domain.product.ProductService;
-import kr.hhplus.be.server.domain.ranking.*;
+import kr.hhplus.be.domain.product.ProductInfo;
+import kr.hhplus.be.domain.product.ProductService;
+import kr.hhplus.be.domain.ranking.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
