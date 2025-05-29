@@ -13,7 +13,6 @@ public class OrderEventListener {
 
     private final GlobalEventPublisher globalEventPublisher;
 
-
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     @Async
     public void handleOrderCompleted(OrderCompletedEvent event) {
