@@ -81,9 +81,11 @@ class CouponServiceTest {
         User user = User.create("yeop");
         Long couponId = 1L;
         CouponCommand.IssueCall command = new CouponCommand.IssueCall(user, couponId);
-        when(couponRepository.issueCall(user.getId(), couponId)).thenReturn(true);
+        when(couponRepository.issueCall(couponId, user.getId())).thenReturn(true);
         // when // then
         couponService.issueCall(command);
+        verify(couponRepository, times(1)).issueCall(couponId, user.getId());
+        verify(publisher, times(1)).publishEvent(any(CouponEvent.IssueCalled.class));
     }
 
 }

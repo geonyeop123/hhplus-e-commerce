@@ -31,7 +31,7 @@ class CouponTest {
 
     @Nested
     class issueValidation{
-        @DisplayName("쿠폰의 발급 가능 개수가 0인 경우 유효성 검사에 실패하며 false를 반환한다.")
+        @DisplayName("쿠폰의 발급 가능 개수가 0인 경우 유효성 검사에 실패하며 CouponIssueLimitExceededException이 발생한다.")
         @Test
         void issueLeftQuantityZero() {
             // given
@@ -45,7 +45,7 @@ class CouponTest {
 
         }
 
-        @DisplayName("현재 날짜가 쿠폰의 발급 기간이 아닌 경우 유효성 검사에 실패하며 false를 반환한다.")
+        @DisplayName("현재 날짜가 쿠폰의 발급 기간이 아닌 경우 유효성 검사에 실패하며 CouponIssuePeriodException 발생한다.")
         @Test
         void notIssuePeriod() {
             // given

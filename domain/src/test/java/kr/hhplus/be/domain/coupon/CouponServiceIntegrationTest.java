@@ -4,6 +4,8 @@ import kr.hhplus.be.domain.user.User;
 import kr.hhplus.be.infra.coupon.JpaCouponRepository;
 import kr.hhplus.be.infra.user.JpaUserRepository;
 import kr.hhplus.be.support.exception.AlreadyIssuedException;
+import kr.hhplus.be.support.exception.CouponIssueLimitExceededException;
+import kr.hhplus.be.support.exception.CouponIssuePeriodException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -55,19 +57,31 @@ class CouponServiceIntegrationTest {
         assertThat(findCoupon).isNotNull();
     }
 
-    @DisplayName("유효성 검사에 실패한 경우 coupon의 상태가 finish로 변경된다.")
+    @DisplayName("발급 가능 수량을 초괴한 경우 CouponIssueLimitExceededException이 발생한다.")
     @Test
-    void issueValidate() {
+    void overIssueLimit() {
         // given
         Coupon coupon = Coupon.create("4월 반짝 쿠폰", CouponType.TOTAL, DiscountType.FIXED, 5000, 3, LocalDate.now(), LocalDate.now().plusDays(3), 0);
         jpaCouponRepository.save(coupon);
 
         // when
-        couponService.issueValidate(coupon.getId());
+        assertThatThrownBy(() -> couponService.issueValidate(coupon.getId()))
+                .isInstanceOf(CouponIssueLimitExceededException.class)
+                .hasMessage("발급 가능한 수량을 초과하였습니다.");
+    }
 
-        // then
-        Coupon findCoupon = jpaCouponRepository.findById(coupon.getId()).orElseThrow();
-        assertThat(findCoupon.getIssueStatus()).isEqualTo(IssueStatus.FINISH);
+    @DisplayName("발급 가능 수량을 초괴한 경우 CouponIssueLimitExceededException이 발생한다.")
+    @Test
+    void notIssuePeriod() {
+        // given
+        Coupon coupon = Coupon.create("4월 반짝 쿠폰", CouponType.TOTAL, DiscountType.FIXED, 5000, 3
+                , LocalDate.now().plusDays(1), LocalDate.now().plusDays(3), 10);
+        jpaCouponRepository.save(coupon);
+
+        // when
+        assertThatThrownBy(() -> couponService.issueValidate(coupon.getId()))
+                .isInstanceOf(CouponIssuePeriodException.class)
+                .hasMessage("쿠폰 발급 기간이 아닙니다.");
     }
 
     @Nested
