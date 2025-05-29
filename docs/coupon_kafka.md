@@ -60,7 +60,7 @@ edis를 통해서 발급되고 있는데, 레디스 데이터를 읽고 저장�
 
 이를 Kafka를 통해서 아래와 같이 변경하였다.
 
-### [변경 전] 쿠폰 발급 요청 로직
+### [변경 후] 쿠폰 발급 요청 로직
 ![afterCouponCall.png](img/afterCouponCall.png)
 
 ### [변경 후] 쿠폰 발급 로직
