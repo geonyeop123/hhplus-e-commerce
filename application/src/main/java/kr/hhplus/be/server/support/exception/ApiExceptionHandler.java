@@ -1,5 +1,6 @@
 package kr.hhplus.be.server.support.exception;
 
+import kr.hhplus.be.support.exception.AlreadyIssuedException;
 import kr.hhplus.be.support.exception.BusinessException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -8,6 +9,12 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 @RestControllerAdvice(basePackages = "kr.hhplus.be.server.interfaces")
 public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
+
+    @ExceptionHandler(AlreadyIssuedException.class)
+    public ResponseEntity<ErrorResponse> handleAlreadyIssuedException(AlreadyIssuedException e) {
+        ErrorResponse response = new ErrorResponse(String.valueOf(409), e.getMessage());
+        return ResponseEntity.status(409).body(response);
+    }
 
     @ExceptionHandler(BusinessException.class)
     public ResponseEntity<ErrorResponse> handleBusinessException(BusinessException e) {
